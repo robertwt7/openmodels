@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-03-24
+
+### Added
+- Created central `data/models.json` acting as an open contribution database for models and benchmarks.
+- Created `Sidebar` component for structural and persistent left-side navigation featuring paths for LLM, Diffusion, Audio, Leaderboard, and Compare.
+- Restructured `app/layout.tsx` to include the global sidebar in a 12-column kinetic grid layout, fixing scrolling within main content bounds.
+- Hooked `app/page.tsx` up to the `models.json` data source.
+- Built new `app/compare/page.tsx` integrating `recharts` to render visual comparative telemetry arrays (Bar Chart & Radar Chart) between top open source LLMs.
+- Built new `app/leaderboard/page.tsx` displaying a live ranking table sorted dynamically by MMLU capabilities.
+
 ## [0.1.0] - 2026-03-24
 
 ### Added

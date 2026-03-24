@@ -1,0 +1,102 @@
+{
+  "llm": [
+    {
+      "id": "llama-3-70b",
+      "name": "Llama 3 70B",
+      "architecture": "Transformer",
+      "description": "Highly capable foundation model trained on massive multilingual datasets.",
+      "creator": "Meta",
+      "releaseDate": "2024-04-18",
+      "params": "70B",
+      "context": "8k",
+      "benchmarks": {
+        "mmlu": 82.0,
+        "humanEval": 81.7,
+        "gsm8k": 79.2,
+        "math": 93.0
+      }
+    },
+    {
+      "id": "mixtral-8x22b",
+      "name": "Mixtral 8x22B",
+      "architecture": "MoE",
+      "description": "Sparse mixture-of-experts model providing high performance at lower inference cost.",
+      "creator": "Mistral AI",
+      "releaseDate": "2024-04-10",
+      "params": "141B",
+      "context": "64k",
+      "benchmarks": {
+        "mmlu": 77.3,
+        "humanEval": 75.0,
+        "gsm8k": 71.4,
+        "math": 89.1
+      }
+    },
+    {
+      "id": "qwen-1.5-72b",
+      "name": "Qwen 1.5 72B",
+      "architecture": "Transformer",
+      "description": "Robust multilingual model with strong reasoning and coding capabilities.",
+      "creator": "Alibaba Cloud",
+      "releaseDate": "2024-02-04",
+      "params": "72B",
+      "context": "32k",
+      "benchmarks": {
+        "mmlu": 77.5,
+        "humanEval": 71.9,
+        "gsm8k": 82.3,
+        "math": 84.6
+      }
+    },
+    {
+      "id": "command-r-plus",
+      "name": "Command R+",
+      "architecture": "Transformer",
+      "description": "State-of-the-art RAG-optimized model built for enterprise workloads.",
+      "creator": "Cohere",
+      "releaseDate": "2024-04-04",
+      "params": "104B",
+      "context": "128k",
+      "benchmarks": {
+        "mmlu": 75.2,
+        "humanEval": 68.1,
+        "gsm8k": 70.0,
+        "math": 81.5
+      }
+    }
+  ],
+  "diffusion": [
+    {
+      "id": "sdxl-1.0",
+      "name": "SDXL 1.0",
+      "architecture": "Latent Diffusion",
+      "description": "High-resolution image synthesis model with enhanced prompt adherence.",
+      "creator": "Stability AI",
+      "releaseDate": "2023-07-26",
+      "params": "3.5B",
+      "fid": 1.2
+    },
+    {
+      "id": "playground-v2.5",
+      "name": "Playground v2.5",
+      "architecture": "Diffusion",
+      "description": "State-of-the-art open source aesthetic image generation model.",
+      "creator": "Playground AI",
+      "releaseDate": "2024-02-27",
+      "params": "Unknown",
+      "fid": 0.9
+    }
+  ],
+  "audio": [
+    {
+      "id": "whisper-v3",
+      "name": "Whisper v3",
+      "architecture": "Transformer",
+      "description": "Robust speech recognition via large-scale weak supervision.",
+      "creator": "OpenAI",
+      "releaseDate": "2023-11-06",
+      "params": "1550M",
+      "wer": 4.2
+    }
+  ]
+}
