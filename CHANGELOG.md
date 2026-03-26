@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-03-26
+
+### Added
+- Expanded `data/models.json` with Diffusion (Flux.1, SDXL, Playground) and Audio (Whisper, SeamlessM4T, Stable Audio Open) models.
+- Implemented "Model Telemetry Control Deck" in `app/compare/page.tsx` for dynamic category and model selection.
+- Enhanced `app/compare/page.tsx` with dynamic Recharts integration, automatically adjusting benchmark axes and radar comparisons based on the selected model category.
+
 ## [0.2.0] - 2026-03-24
 
 ### Added
