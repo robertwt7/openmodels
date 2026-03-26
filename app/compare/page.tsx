@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import {
   BarChart,
   Bar,
@@ -18,7 +19,17 @@ import {
 import modelsData from "@/data/models.json";
 
 export default function ComparePage() {
-  const models = modelsData.llm;
+  const [activeCategory, setActiveCategory] = useState<keyof typeof modelsData>("llm");
+  const [modelAId, setModelAId] = useState(modelsData.llm[0].id);
+  const [modelBId, setModelBId] = useState(modelsData.llm[1].id);
+
+  useEffect(() => {
+    const categoryModels = (modelsData as any)[activeCategory];
+    setModelAId(categoryModels[0].id);
+    setModelBId(categoryModels[1]?.id || categoryModels[0].id);
+  }, [activeCategory]);
+
+  const models = (modelsData as any)[activeCategory];
 
   // Formatting data for the bar chart
   const barChartData = models.map((m) => ({
@@ -70,6 +81,45 @@ export default function ComparePage() {
           Analyze raw cognitive output capabilities.
         </p>
       </header>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-surface-lowest border border-outline-variant/30 mb-8 font-mono text-sm">
+        <div className="flex flex-col gap-2">
+          <label className="text-primary text-xs uppercase tracking-widest">Category</label>
+          <select 
+            value={activeCategory} 
+            onChange={(e) => setActiveCategory(e.target.value as any)}
+            className="bg-surface-highest border border-outline-variant/30 p-2 text-white outline-none focus:border-primary"
+          >
+            <option value="llm">LLM</option>
+            <option value="diffusion">DIFFUSION</option>
+            <option value="audio">AUDIO</option>
+          </select>
+        </div>
+        <div className="flex flex-col gap-2">
+          <label className="text-primary text-xs uppercase tracking-widest">Node Alpha</label>
+          <select 
+            value={modelAId} 
+            onChange={(e) => setModelAId(e.target.value)}
+            className="bg-surface-highest border border-outline-variant/30 p-2 text-white outline-none focus:border-primary"
+          >
+            {(modelsData as any)[activeCategory].map((m: any) => (
+              <option key={m.id} value={m.id}>{m.name}</option>
+            ))}
+          </select>
+        </div>
+        <div className="flex flex-col gap-2">
+          <label className="text-primary text-xs uppercase tracking-widest">Node Beta</label>
+          <select 
+            value={modelBId} 
+            onChange={(e) => setModelBId(e.target.value)}
+            className="bg-surface-highest border border-outline-variant/30 p-2 text-white outline-none focus:border-primary"
+          >
+            {(modelsData as any)[activeCategory].map((m: any) => (
+              <option key={m.id} value={m.id}>{m.name}</option>
+            ))}
+          </select>
+        </div>
+      </div>
 
       <section className="bg-surface-low border border-outline-variant/20 p-6 relative overflow-hidden group">
         <div className="absolute top-0 right-0 w-16 h-16 border-t border-r border-outline-variant/30"></div>
