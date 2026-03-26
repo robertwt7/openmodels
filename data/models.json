@@ -63,28 +63,66 @@
         "gsm8k": 70.0,
         "math": 81.5
       }
+    },
+    {
+      "id": "gemma-2-27b",
+      "name": "Gemma 2 27B",
+      "architecture": "Transformer",
+      "description": "Google's lightweight, state-of-the-art open model.",
+      "creator": "Google",
+      "releaseDate": "2024-06-27",
+      "params": "27B",
+      "context": "8k",
+      "benchmarks": {
+        "mmlu": 81.1,
+        "humanEval": 71.3,
+        "gsm8k": 74.0,
+        "math": 85.0
+      }
     }
   ],
   "diffusion": [
     {
+      "id": "flux-1-schnell",
+      "name": "Flux.1 [schnell]",
+      "architecture": "Flow-based Transformer",
+      "description": "SOTA high-speed rectified flow transformer model.",
+      "creator": "Black Forest Labs",
+      "releaseDate": "2024-08-01",
+      "params": "12B",
+      "benchmarks": {
+        "fid": 0.85,
+        "clipScore": 0.32,
+        "genSpeed": 4.2
+      }
+    },
+    {
       "id": "sdxl-1.0",
       "name": "SDXL 1.0",
       "architecture": "Latent Diffusion",
-      "description": "High-resolution image synthesis model with enhanced prompt adherence.",
+      "description": "High-resolution image synthesis model.",
       "creator": "Stability AI",
       "releaseDate": "2023-07-26",
       "params": "3.5B",
-      "fid": 1.2
+      "benchmarks": {
+        "fid": 1.2,
+        "clipScore": 0.28,
+        "genSpeed": 1.5
+      }
     },
     {
       "id": "playground-v2.5",
       "name": "Playground v2.5",
       "architecture": "Diffusion",
-      "description": "State-of-the-art open source aesthetic image generation model.",
+      "description": "Aesthetic-optimized image generation model.",
       "creator": "Playground AI",
       "releaseDate": "2024-02-27",
       "params": "Unknown",
-      "fid": 0.9
+      "benchmarks": {
+        "fid": 0.9,
+        "clipScore": 0.30,
+        "genSpeed": 2.1
+      }
     }
   ],
   "audio": [
@@ -92,11 +130,43 @@
       "id": "whisper-v3",
       "name": "Whisper v3",
       "architecture": "Transformer",
-      "description": "Robust speech recognition via large-scale weak supervision.",
+      "description": "Robust speech recognition model.",
       "creator": "OpenAI",
       "releaseDate": "2023-11-06",
       "params": "1550M",
-      "wer": 4.2
+      "benchmarks": {
+        "wer": 4.2,
+        "latency": 0.8,
+        "multilingual": 95.0
+      }
+    },
+    {
+      "id": "seamless-m4t-v2",
+      "name": "SeamlessM4T v2",
+      "architecture": "UnitY2",
+      "description": "Massively multilingual & multimodal translation model.",
+      "creator": "Meta",
+      "releaseDate": "2023-11-30",
+      "params": "2.3B",
+      "benchmarks": {
+        "wer": 4.8,
+        "latency": 1.2,
+        "multilingual": 98.5
+      }
+    },
+    {
+      "id": "stable-audio-open",
+      "name": "Stable Audio Open",
+      "architecture": "Latent Diffusion",
+      "description": "Open weights for high-quality audio synthesis.",
+      "creator": "Stability AI",
+      "releaseDate": "2024-06-05",
+      "params": "Unknown",
+      "benchmarks": {
+        "wer": 0.0,
+        "latency": 2.5,
+        "multilingual": 0.0
+      }
     }
   ]
 }
