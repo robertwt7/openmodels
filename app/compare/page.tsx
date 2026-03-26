@@ -30,21 +30,26 @@ export default function ComparePage() {
   }, [activeCategory]);
 
   const models = (modelsData as any)[activeCategory];
+  const modelA = models.find((m: any) => m.id === modelAId) || models[0];
+  const modelB = models.find((m: any) => m.id === modelBId) || models[1] || models[0];
+  
+  const benchmarkKeys = Object.keys(modelA.benchmarks);
 
-  // Formatting data for the bar chart
-  const barChartData = models.map((m) => ({
-    name: m.name,
-    MMLU: m.benchmarks.mmlu,
-    HumanEval: m.benchmarks.humanEval,
-    GSM8K: m.benchmarks.gsm8k,
-  }));
+  // Formatting data for the bar chart - show all models in category
+  const barChartData = models.map((m: any) => {
+    const entry: any = { name: m.name };
+    benchmarkKeys.forEach(key => {
+      entry[key] = m.benchmarks[key];
+    });
+    return entry;
+  });
 
-  // Reshape data for radar chart comparing top 2 models
-  const radarChartData = Object.keys(models[0].benchmarks).map((key) => {
+  // Reshape data for radar chart comparing selected Node Alpha vs Node Beta
+  const radarChartData = benchmarkKeys.map((key) => {
     return {
       subject: key.toUpperCase(),
-      [models[0].name]: (models[0].benchmarks as any)[key],
-      [models[1].name]: (models[1].benchmarks as any)[key],
+      [modelA.name]: (modelA.benchmarks as any)[key],
+      [modelB.name]: (modelB.benchmarks as any)[key],
     };
   });
 
@@ -57,7 +62,7 @@ export default function ComparePage() {
           {payload.map((entry: any, index: number) => (
             <p key={index} className="font-mono text-sm flex gap-4 justify-between" style={{ color: entry.color }}>
               <span className="uppercase">{entry.name}:</span>
-              <span>{entry.value}%</span>
+              <span>{entry.value}</span>
             </p>
           ))}
         </div>
@@ -65,6 +70,8 @@ export default function ComparePage() {
     }
     return null;
   };
+
+  const colors = ["#DFFF00", "#FFBF00", "#60a5fa", "#f472b6", "#a78bfa"];
 
   return (
     <>
@@ -77,7 +84,7 @@ export default function ComparePage() {
           Model <span className="text-secondary-container">Telemetry</span>
         </h1>
         <p className="text-gray-400 font-body max-w-2xl">
-          Visual comparative analysis of LLM performance across major benchmarks. 
+          Visual comparative analysis of {activeCategory.toUpperCase()} performance across major benchmarks. 
           Analyze raw cognitive output capabilities.
         </p>
       </header>
@@ -88,7 +95,7 @@ export default function ComparePage() {
           <select 
             value={activeCategory} 
             onChange={(e) => setActiveCategory(e.target.value as any)}
-            className="bg-surface-highest border border-outline-variant/30 p-2 text-white outline-none focus:border-primary"
+            className="bg-surface-highest border border-outline-variant/30 p-2 text-white outline-none focus:border-primary cursor-pointer hover:border-primary/50 transition-colors"
           >
             <option value="llm">LLM</option>
             <option value="diffusion">DIFFUSION</option>
@@ -100,9 +107,9 @@ export default function ComparePage() {
           <select 
             value={modelAId} 
             onChange={(e) => setModelAId(e.target.value)}
-            className="bg-surface-highest border border-outline-variant/30 p-2 text-white outline-none focus:border-primary"
+            className="bg-surface-highest border border-outline-variant/30 p-2 text-white outline-none focus:border-primary cursor-pointer hover:border-primary/50 transition-colors"
           >
-            {(modelsData as any)[activeCategory].map((m: any) => (
+            {models.map((m: any) => (
               <option key={m.id} value={m.id}>{m.name}</option>
             ))}
           </select>
@@ -112,9 +119,9 @@ export default function ComparePage() {
           <select 
             value={modelBId} 
             onChange={(e) => setModelBId(e.target.value)}
-            className="bg-surface-highest border border-outline-variant/30 p-2 text-white outline-none focus:border-primary"
+            className="bg-surface-highest border border-outline-variant/30 p-2 text-white outline-none focus:border-primary cursor-pointer hover:border-primary/50 transition-colors"
           >
-            {(modelsData as any)[activeCategory].map((m: any) => (
+            {models.map((m: any) => (
               <option key={m.id} value={m.id}>{m.name}</option>
             ))}
           </select>
@@ -125,7 +132,7 @@ export default function ComparePage() {
         <div className="absolute top-0 right-0 w-16 h-16 border-t border-r border-outline-variant/30"></div>
         <h2 className="font-mono text-xs uppercase tracking-widest text-primary mb-8 flex items-center gap-2">
           <BarChart2Icon className="w-4 h-4" />
-          Benchmark Array (MMLU vs HumanEval vs GSM8K)
+          Benchmark Array ({benchmarkKeys.map(k => k.toUpperCase()).join(" vs ")})
         </h2>
         <div className="h-[400px] w-full">
           <ResponsiveContainer width="100%" height="100%">
@@ -135,12 +142,12 @@ export default function ComparePage() {
             >
               <CartesianGrid strokeDasharray="3 3" stroke="#454932" opacity={0.3} vertical={false} />
               <XAxis dataKey="name" stroke="#e0e6f8" fontFamily="var(--font-jetbrains-mono)" fontSize={12} tickLine={false} axisLine={false} />
-              <YAxis stroke="#e0e6f8" fontFamily="var(--font-jetbrains-mono)" fontSize={12} domain={[60, 100]} tickLine={false} axisLine={false} />
+              <YAxis stroke="#e0e6f8" fontFamily="var(--font-jetbrains-mono)" fontSize={12} tickLine={false} axisLine={false} />
               <Tooltip content={<CustomTooltip />} cursor={{ fill: '#2f3445', opacity: 0.4 }} />
               <Legend wrapperStyle={{ fontFamily: 'var(--font-jetbrains-mono)', fontSize: '12px' }} iconType="square" />
-              <Bar dataKey="MMLU" fill="#DFFF00" />
-              <Bar dataKey="HumanEval" fill="#FFBF00" />
-              <Bar dataKey="GSM8K" fill="#60a5fa" />
+              {benchmarkKeys.map((key, index) => (
+                <Bar key={key} dataKey={key} fill={colors[index % colors.length]} />
+              ))}
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -149,16 +156,16 @@ export default function ComparePage() {
       <section className="bg-surface-low border border-outline-variant/20 p-6 relative overflow-hidden">
         <h2 className="font-mono text-xs uppercase tracking-widest text-primary mb-8 flex items-center gap-2">
           <RadarIcon className="w-4 h-4" />
-          Multivariate Capability Spread
+          Node Comparison: {modelA.name} vs {modelB.name}
         </h2>
         <div className="h-[500px] w-full flex items-center justify-center">
            <ResponsiveContainer width="100%" height="100%">
               <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarChartData}>
                 <PolarGrid stroke="#454932" />
                 <PolarAngleAxis dataKey="subject" tick={{ fill: '#e0e6f8', fontSize: 12, fontFamily: 'var(--font-jetbrains-mono)' }} />
-                <PolarRadiusAxis angle={30} domain={[60, 100]} tick={{ fill: '#e0e6f8', fontSize: 10 }} />
-                <Radar name={models[0].name} dataKey={models[0].name} stroke="#DFFF00" fill="#DFFF00" fillOpacity={0.2} />
-                <Radar name={models[1].name} dataKey={models[1].name} stroke="#FFBF00" fill="#FFBF00" fillOpacity={0.2} />
+                <PolarRadiusAxis angle={30} tick={{ fill: '#e0e6f8', fontSize: 10 }} />
+                <Radar name={modelA.name} dataKey={modelA.name} stroke="#DFFF00" fill="#DFFF00" fillOpacity={0.2} />
+                <Radar name={modelB.name} dataKey={modelB.name} stroke="#FFBF00" fill="#FFBF00" fillOpacity={0.2} />
                 <Legend wrapperStyle={{ fontFamily: 'var(--font-jetbrains-mono)', fontSize: '12px', marginTop: '20px' }} />
                 <Tooltip content={<CustomTooltip />} />
               </RadarChart>
