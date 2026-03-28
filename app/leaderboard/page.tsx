@@ -68,7 +68,7 @@ export default function LeaderboardPage() {
     const bVal: number | null = b.benchmarks[config.sortKey];
     if (aVal === null || aVal === undefined) return 1;
     if (bVal === null || bVal === undefined) return -1;
-    return config.sortAscending ? aVal - bVal : bVal - aVal;
+    return (config.sortAscending ? aVal - bVal : bVal - aVal) || a.id.localeCompare(b.id);
   });
 
   return (
@@ -111,14 +111,14 @@ export default function LeaderboardPage() {
               <th className="px-6 py-4 font-normal">Model</th>
               <th className="px-6 py-4 font-normal">Params</th>
               {config.columns.map((col, i) => (
-                <th key={col.key} className={`px-6 py-4 font-normal ${i === 0 ? "text-primary" : ""}`}>
+                <th key={col.key} className={`px-6 py-4 font-normal ${col.key === config.sortKey ? "text-primary" : ""}`}>
                   <span className="flex items-center gap-1">
                     <BenchmarkTooltip
                       label={col.label}
                       description={col.description}
                       lowerIsBetter={col.lowerIsBetter}
                     />
-                    {i === 0 && <ChevronDown className="w-3 h-3 ml-1" />}
+                    {col.key === config.sortKey && <ChevronDown className="w-3 h-3 ml-1" />}
                   </span>
                 </th>
               ))}
@@ -149,7 +149,7 @@ export default function LeaderboardPage() {
                 {config.columns.map((col, i) => {
                   const val = model.benchmarks[col.key];
                   return (
-                    <td key={col.key} className={`px-6 py-4 ${i === 0 ? "text-primary" : ""}`}>
+                    <td key={col.key} className={`px-6 py-4 ${col.key === config.sortKey ? "text-primary" : ""}`}>
                       {val !== null && val !== undefined ? val : (
                         <span className="text-gray-600">—</span>
                       )}
