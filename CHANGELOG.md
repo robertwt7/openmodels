@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2026-03-29
+
+### Added
+- **Compare page — multi-node selection:** Users can now compare up to 5 models simultaneously. The Control Deck has a dynamic node list with `+ ADD NODE` / `✕ REMOVE` controls. Node dropdowns are color-coded (Cyber Lime, Amber, Blue, Pink, Purple).
+- **Compare page — adaptive charts:** Both the Bar Chart and Radar Chart now filter to only the selected models. Bar chart groups by benchmark (X axis) with one bar per selected model for clear cross-model comparison.
+- **Leaderboard — category tabs:** Three tabs (LLM / Diffusion / Audio) filter the leaderboard table. Columns adapt per category (MMLU/HumanEval/GSM8K/Math for LLM, FID/CLIP/Speed for Diffusion, WER/Latency/Multilingual for Audio).
+- **Benchmark tooltips:** New `BenchmarkTooltip` component wraps any benchmark label with an `ⓘ` icon. Hovering shows a glassmorphism card with a plain-English definition and a "▼ Lower is better" tag where applicable.
+- **Expanded model database:** 11 LLM models (added DeepSeek-V3, Llama 3.1 405B, Mistral Large 2, Phi-4, Falcon 180B, Yi-34B, Gemma 2 27B, Qwen 1.5 72B, Mixtral 8x22B, Command R+), 7 diffusion models (added FLUX.1 [dev], SD 3.5 Large, Kolors, PixArt-Σ, SDXL 1.0, Playground v2.5), 7 audio models (added Distil-Whisper, Wav2Vec 2.0 Large, Whisper v3, SeamlessM4T v2, MMS, Bark, Stable Audio Open).
+- **Null benchmark handling:** Missing benchmarks render as `—` in the leaderboard and sort to the bottom.
+
+## [0.4.0] - 2026-03-28
+
+### Fixed
+- **Homepage search**: Converted `app/page.tsx` to a client component and wired up the search input with `useState` + live filtering across model name, architecture, creator, and description. Also updated the model count badge to reflect filtered results.
+- **Diffusion page**: Created `app/diffusion/page.tsx` — was missing entirely, causing a 404 with a white-background error page.
+- **Audio page**: Created `app/audio/page.tsx` — was missing entirely, same issue as diffusion.
+- **Compare page select boxes**: Replaced full-border `<select>` styling with bottom-border-only `appearance-none` selects prefixed with the terminal `>` prompt, matching the Kinetic Mainframe design system's "Terminal Command" input spec.
+
 ## [0.3.0] - 2026-03-26
 
 ### Added
