@@ -110,7 +110,7 @@ export default function LeaderboardPage() {
               <th className="px-6 py-4 font-normal">Rank</th>
               <th className="px-6 py-4 font-normal">Model</th>
               <th className="px-6 py-4 font-normal">Params</th>
-              {config.columns.map((col, i) => (
+              {config.columns.map((col) => (
                 <th key={col.key} className={`px-6 py-4 font-normal ${col.key === config.sortKey ? "text-primary" : ""}`}>
                   <span className="flex items-center gap-1">
                     <BenchmarkTooltip
