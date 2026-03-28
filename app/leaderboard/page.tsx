@@ -61,6 +61,7 @@ export default function LeaderboardPage() {
   const [activeCategory, setActiveCategory] = useState<Category>("llm");
 
   const config = categoryConfig[activeCategory];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const models = (modelsData as any)[activeCategory] as any[];
 
   const sorted = [...models].sort((a, b) => {
@@ -146,7 +147,7 @@ export default function LeaderboardPage() {
                   {model.name}
                 </td>
                 <td className="px-6 py-4 text-gray-500">{model.params}</td>
-                {config.columns.map((col, i) => {
+                {config.columns.map((col) => {
                   const val = model.benchmarks[col.key];
                   return (
                     <td key={col.key} className={`px-6 py-4 ${col.key === config.sortKey ? "text-primary" : ""}`}>

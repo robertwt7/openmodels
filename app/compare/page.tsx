@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   BarChart,
   Bar,
@@ -35,11 +35,13 @@ const benchmarkInfo: Record<string, { description: string; lowerIsBetter: boolea
   multilingual: { description: "Percentage of tested languages achieving acceptable transcription or translation quality.", lowerIsBetter: false },
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-surface-highest border border-outline-variant/30 p-4 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
         <p className="font-display font-bold text-white mb-2 uppercase">{label}</p>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         {payload.map((entry: any, index: number) => (
           <p key={index} className="font-mono text-sm flex gap-4 justify-between" style={{ color: entry.color }}>
             <span className="uppercase">{entry.name}:</span>
@@ -59,16 +61,20 @@ export default function ComparePage() {
     modelsData.llm[1].id,
   ]);
 
-  useEffect(() => {
-    const categoryModels = (modelsData as any)[activeCategory] as any[];
+  const handleCategoryChange = (newCategory: keyof typeof modelsData) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const categoryModels = (modelsData as any)[newCategory] as Array<{ id: string }>;
+    setActiveCategory(newCategory);
     setSelectedModelIds([
       categoryModels[0].id,
       categoryModels[1]?.id ?? categoryModels[0].id,
     ]);
-  }, [activeCategory]);
+  };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const models = (modelsData as any)[activeCategory] as any[];
   const selectedModels = selectedModelIds
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .map((id) => models.find((m: any) => m.id === id))
     .filter((m): m is NonNullable<typeof m> => m != null);
 
@@ -76,6 +82,7 @@ export default function ComparePage() {
 
   const addNode = () => {
     if (selectedModelIds.length >= 5) return;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const next = models.find((m: any) => !selectedModelIds.includes(m.id));
     if (next) setSelectedModelIds([...selectedModelIds, next.id]);
   };
@@ -94,17 +101,15 @@ export default function ComparePage() {
 
   const barChartData = selectedModels.length > 0 ? benchmarkKeys.map((key) => {
     const entry: Record<string, string | number | null> = { benchmark: key.toUpperCase() };
-    selectedModels.forEach((m: any) => {
-      entry[m.name] = m.benchmarks[key] ?? null;
-    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    selectedModels.forEach((m: any) => { entry[m.name] = m.benchmarks[key] ?? null; });
     return entry;
   }) : [];
 
   const radarChartData = selectedModels.length > 0 ? benchmarkKeys.map((key) => {
     const entry: Record<string, string | number> = { subject: key.toUpperCase() };
-    selectedModels.forEach((m: any) => {
-      entry[m.name] = m.benchmarks[key] ?? 0;
-    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    selectedModels.forEach((m: any) => { entry[m.name] = m.benchmarks[key] ?? 0; });
     return entry;
   }) : [];
 
@@ -134,7 +139,7 @@ export default function ComparePage() {
             <div className="relative flex-1">
               <select
                 value={activeCategory}
-                onChange={(e) => setActiveCategory(e.target.value as keyof typeof modelsData)}
+                onChange={(e) => handleCategoryChange(e.target.value as keyof typeof modelsData)}
                 className="appearance-none bg-transparent w-full border-b-2 border-outline-variant/40 focus:border-primary pb-1 text-white outline-none cursor-pointer transition-colors pr-6"
               >
                 <option value="llm" className="bg-surface-highest">LLM</option>
@@ -180,6 +185,7 @@ export default function ComparePage() {
                       onChange={(e) => updateNode(index, e.target.value)}
                       className="appearance-none bg-transparent w-full border-b-2 border-outline-variant/40 focus:border-primary pb-1 text-white outline-none cursor-pointer transition-colors pr-6 text-sm"
                     >
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                       {models.map((m: any) => (
                         <option key={m.id} value={m.id} className="bg-surface-highest">
                           {m.name}
@@ -258,6 +264,7 @@ export default function ComparePage() {
                 wrapperStyle={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "12px" }}
                 iconType="square"
               />
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               {selectedModels.map((m: any, i: number) => (
                 <Bar key={m.id} dataKey={m.name} fill={colors[i % colors.length]} />
               ))}
@@ -271,6 +278,7 @@ export default function ComparePage() {
         <h2 className="font-mono text-xs uppercase tracking-widest text-primary mb-6">
           ◈ Node Comparison —{" "}
           <span className="text-gray-500 font-normal">
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {selectedModels.map((m: any) => m.name).join(" vs ")}
           </span>
         </h2>
@@ -283,6 +291,7 @@ export default function ComparePage() {
                 tick={{ fill: "#e0e6f8", fontSize: 12, fontFamily: "var(--font-jetbrains-mono)" }}
               />
               <PolarRadiusAxis angle={30} tick={{ fill: "#e0e6f8", fontSize: 10 }} />
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               {selectedModels.map((m: any, i: number) => (
                 <Radar
                   key={m.id}
