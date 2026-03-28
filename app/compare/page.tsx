@@ -35,6 +35,23 @@ const benchmarkInfo: Record<string, { description: string; lowerIsBetter: boolea
   multilingual: { description: "Percentage of tested languages achieving acceptable transcription or translation quality.", lowerIsBetter: false },
 };
 
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-surface-highest border border-outline-variant/30 p-4 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+        <p className="font-display font-bold text-white mb-2 uppercase">{label}</p>
+        {payload.map((entry: any, index: number) => (
+          <p key={index} className="font-mono text-sm flex gap-4 justify-between" style={{ color: entry.color }}>
+            <span className="uppercase">{entry.name}:</span>
+            <span>{entry.value ?? "—"}</span>
+          </p>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
+
 export default function ComparePage() {
   const [activeCategory, setActiveCategory] = useState<keyof typeof modelsData>("llm");
   const [selectedModelIds, setSelectedModelIds] = useState<string[]>([
@@ -53,7 +70,7 @@ export default function ComparePage() {
   const models = (modelsData as any)[activeCategory] as any[];
   const selectedModels = selectedModelIds
     .map((id) => models.find((m: any) => m.id === id))
-    .filter(Boolean) as any[];
+    .filter((m): m is NonNullable<typeof m> => m != null);
 
   const benchmarkKeys = selectedModels.length > 0 ? Object.keys(selectedModels[0].benchmarks) : [];
 
@@ -69,43 +86,27 @@ export default function ComparePage() {
   };
 
   const updateNode = (index: number, modelId: string) => {
+    if (selectedModelIds.some((id, i) => id === modelId && i !== index)) return;
     const updated = [...selectedModelIds];
     updated[index] = modelId;
     setSelectedModelIds(updated);
   };
 
-  const barChartData = benchmarkKeys.map((key) => {
+  const barChartData = selectedModels.length > 0 ? benchmarkKeys.map((key) => {
     const entry: Record<string, string | number | null> = { benchmark: key.toUpperCase() };
     selectedModels.forEach((m: any) => {
       entry[m.name] = m.benchmarks[key] ?? null;
     });
     return entry;
-  });
+  }) : [];
 
-  const radarChartData = benchmarkKeys.map((key) => {
+  const radarChartData = selectedModels.length > 0 ? benchmarkKeys.map((key) => {
     const entry: Record<string, string | number> = { subject: key.toUpperCase() };
     selectedModels.forEach((m: any) => {
       entry[m.name] = m.benchmarks[key] ?? 0;
     });
     return entry;
-  });
-
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-surface-highest border border-outline-variant/30 p-4 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-          <p className="font-display font-bold text-white mb-2 uppercase">{label}</p>
-          {payload.map((entry: any, index: number) => (
-            <p key={index} className="font-mono text-sm flex gap-4 justify-between" style={{ color: entry.color }}>
-              <span className="uppercase">{entry.name}:</span>
-              <span>{entry.value ?? "—"}</span>
-            </p>
-          ))}
-        </div>
-      );
-    }
-    return null;
-  };
+  }) : [];
 
   return (
     <>
