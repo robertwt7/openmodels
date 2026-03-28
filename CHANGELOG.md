@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2026-03-29
+
+### Added
+- **Model detail page:** New dynamic route `/models/[category]/[id]` with full model profiles — metadata grid, benchmark readout cards with rank/avg/best, normalized radar chart, category standing bar chart, and peer comparison table.
+- **Clickable model cards:** All listing pages (LLM, Diffusion, Audio) and leaderboard now link to model detail pages.
+- **Shared benchmark metadata:** Centralized `lib/benchmarks.ts` with descriptions, units, and lowerIsBetter flags — used across compare, leaderboard, and detail pages.
+
+### Fixed
+- **Benchmark tooltips:** Rewrote `BenchmarkTooltip` as a portal-based client component using `createPortal` to `document.body`. Tooltips now render above all overflow containers and are visible in the leaderboard table.
+
+## [0.6.0] - 2026-03-29
+
+### Added
+- **Expanded LLM database:** Added 15 new models — DeepSeek-R1, DeepSeek-V2, Qwen2.5 72B, Qwen2.5 7B, Llama 3.3 70B, Llama 3.2 90B, Gemma 2 9B, InternLM2.5 20B, Mixtral 8x7B, Mistral 7B v0.3, Command R, OLMo 2 7B, Phi-3.5 Mini, StarCoder2 15B, Falcon 40B. LLM total is now 26 models.
+- **Expanded diffusion database:** Added 13 new models — HiDream-I1 Full, CogView3-Plus, PixArt-α, SD 3 Medium, SD 2.1, SD 1.5, Würstchen v2, InstaFlow 0.9B, Lumina-T2X, OmniGen v1, Kandinsky 3.0, Dreamshaper XL, RealVisXL v4.0, Juggernaut XL. Diffusion total is now 21 models.
+- **Expanded audio database:** Added 13 new models — Parakeet TDT 1.1B, Whisper Large v2, Whisper Medium, Whisper Small, HuBERT Large, SpeechT5, XTTS v2, MusicGen Large, Vocos, WhisperX, NeMo FastConformer, Moonshine Base, EnCodec. Audio total is now 20 models.
+
 ## [0.5.0] - 2026-03-29
 
 ### Added

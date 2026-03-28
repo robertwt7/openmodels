@@ -4,7 +4,8 @@
       "Bash(yarn tsc:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(yarn lint:*)"
+      "Bash(yarn lint:*)",
+      "WebSearch"
     ]
   }
 }

@@ -18,22 +18,10 @@ import {
 } from "recharts";
 import modelsData from "@/data/models.json";
 import { BenchmarkTooltip } from "@/components/BenchmarkTooltip";
+import { benchmarkMeta } from "@/lib/benchmarks";
 
 const NODE_LABELS = ["Alpha", "Beta", "Gamma", "Delta", "Epsilon"];
 const colors = ["#DFFF00", "#FFBF00", "#60a5fa", "#f472b6", "#a78bfa"];
-
-const benchmarkInfo: Record<string, { description: string; lowerIsBetter: boolean }> = {
-  mmlu: { description: "Massive Multitask Language Understanding — tests general knowledge across 57 subjects.", lowerIsBetter: false },
-  humanEval: { description: "Code generation accuracy on 164 hand-written Python programming problems.", lowerIsBetter: false },
-  gsm8k: { description: "Grade-school math word problems requiring multi-step arithmetic reasoning.", lowerIsBetter: false },
-  math: { description: "Competition-level math problems drawn from AMC and AIME challenges.", lowerIsBetter: false },
-  fid: { description: "Fréchet Inception Distance — measures statistical realism of generated images vs real images.", lowerIsBetter: true },
-  clipScore: { description: "Alignment between generated image and text prompt using CLIP embedding cosine similarity.", lowerIsBetter: false },
-  genSpeed: { description: "Images generated per second at standard resolution on reference hardware.", lowerIsBetter: false },
-  wer: { description: "Word Error Rate — percentage of words transcribed incorrectly in speech-to-text output.", lowerIsBetter: true },
-  latency: { description: "Seconds from audio input start to first decoded output token.", lowerIsBetter: true },
-  multilingual: { description: "Percentage of tested languages achieving acceptable transcription or translation quality.", lowerIsBetter: false },
-};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CustomTooltip = ({ active, payload, label }: any) => {
@@ -222,7 +210,7 @@ export default function ComparePage() {
           ▦ Benchmark Array —{" "}
           <span className="text-gray-500 font-normal flex items-center gap-2">
             {benchmarkKeys.map((k, i) => {
-              const info = benchmarkInfo[k];
+              const info = benchmarkMeta[k];
               return (
                 <span key={k} className="flex items-center gap-1">
                   {i > 0 && <span className="text-gray-700 mx-1">/</span>}

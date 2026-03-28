@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Activity, Zap } from "lucide-react";
 import modelsData from "@/data/models.json";
 
@@ -81,13 +82,13 @@ export default function Home() {
 
 function ModelCard({ model }: { model: (typeof modelsData.llm)[number] }) {
   return (
-    <div className="bg-surface-low hover:bg-surface-high transition-colors p-6 flex flex-col lg:flex-row gap-6 lg:items-center justify-between group relative overflow-hidden border border-outline-variant/10">
+    <Link href={`/models/llm/${model.id}`} className="bg-surface-low hover:bg-surface-high transition-colors p-6 flex flex-col lg:flex-row gap-6 lg:items-center justify-between group relative overflow-hidden border border-outline-variant/10 no-underline">
       {/* Decorative corner */}
       <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-outline-variant/40"></div>
 
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-3">
-          <h3 className="font-display text-xl font-bold text-white">{model.name}</h3>
+          <h3 className="font-display text-xl font-bold text-white group-hover:text-primary transition-colors">{model.name}</h3>
           <div className="text-xs font-mono border border-outline-variant/20 px-2 py-0.5 text-gray-400">
             {model.architecture}
           </div>
@@ -121,10 +122,10 @@ function ModelCard({ model }: { model: (typeof modelsData.llm)[number] }) {
           </div>
         </div>
 
-        <button className="h-full px-4 border border-outline-variant/20 hover:border-primary/50 text-primary font-mono text-xs uppercase flex items-center justify-center transition-colors bg-surface-lowest hover:bg-primary/5">
-          Load
-        </button>
+        <span className="h-full px-4 border border-outline-variant/20 group-hover:border-primary/50 text-primary font-mono text-xs uppercase flex items-center justify-center transition-colors bg-surface-lowest group-hover:bg-primary/5">
+          View &rarr;
+        </span>
       </div>
-    </div>
+    </Link>
   );
 }

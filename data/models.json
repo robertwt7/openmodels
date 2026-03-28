@@ -12,6 +12,17 @@
       "benchmarks": { "mmlu": 88.6, "humanEval": 89.0, "gsm8k": 96.8, "math": 73.8 }
     },
     {
+      "id": "deepseek-r1",
+      "name": "DeepSeek-R1",
+      "architecture": "MoE",
+      "description": "Reasoning-first open model matching o1 on math and coding via reinforcement learning.",
+      "creator": "DeepSeek",
+      "releaseDate": "2025-01-20",
+      "params": "671B",
+      "context": "128k",
+      "benchmarks": { "mmlu": 90.8, "humanEval": 92.9, "gsm8k": 97.3, "math": 92.3 }
+    },
+    {
       "id": "deepseek-v3",
       "name": "DeepSeek-V3",
       "architecture": "MoE",
@@ -21,6 +32,17 @@
       "params": "671B",
       "context": "128k",
       "benchmarks": { "mmlu": 88.5, "humanEval": 82.6, "gsm8k": 89.3, "math": 61.6 }
+    },
+    {
+      "id": "qwen2.5-72b",
+      "name": "Qwen2.5 72B",
+      "architecture": "Transformer",
+      "description": "Alibaba's flagship open model with strong math, coding, and multilingual capabilities.",
+      "creator": "Alibaba Cloud",
+      "releaseDate": "2024-09-18",
+      "params": "72B",
+      "context": "128k",
+      "benchmarks": { "mmlu": 87.0, "humanEval": 86.0, "gsm8k": 91.6, "math": 83.1 }
     },
     {
       "id": "mistral-large-2",
@@ -34,6 +56,28 @@
       "benchmarks": { "mmlu": 84.0, "humanEval": 92.0, "gsm8k": 93.0, "math": 70.8 }
     },
     {
+      "id": "llama-3.3-70b",
+      "name": "Llama 3.3 70B",
+      "architecture": "Transformer",
+      "description": "Instruction-tuned 70B model matching Llama 3.1 405B on most benchmarks.",
+      "creator": "Meta",
+      "releaseDate": "2024-12-06",
+      "params": "70B",
+      "context": "128k",
+      "benchmarks": { "mmlu": 86.0, "humanEval": 88.4, "gsm8k": 95.1, "math": 77.0 }
+    },
+    {
+      "id": "llama-3.2-90b",
+      "name": "Llama 3.2 90B",
+      "architecture": "Transformer",
+      "description": "Meta's multimodal vision-language model supporting image and text inputs.",
+      "creator": "Meta",
+      "releaseDate": "2024-09-25",
+      "params": "90B",
+      "context": "128k",
+      "benchmarks": { "mmlu": 86.0, "humanEval": 80.2, "gsm8k": 88.5, "math": 68.0 }
+    },
+    {
       "id": "phi-4",
       "name": "Phi-4",
       "architecture": "Transformer",
@@ -45,15 +89,15 @@
       "benchmarks": { "mmlu": 84.8, "humanEval": 82.6, "gsm8k": 91.5, "math": 80.4 }
     },
     {
-      "id": "llama-3-70b",
-      "name": "Llama 3 70B",
-      "architecture": "Transformer",
-      "description": "Highly capable foundation model trained on massive multilingual datasets.",
-      "creator": "Meta",
-      "releaseDate": "2024-04-18",
-      "params": "70B",
-      "context": "8k",
-      "benchmarks": { "mmlu": 82.0, "humanEval": 81.7, "gsm8k": 79.2, "math": 93.0 }
+      "id": "deepseek-v2",
+      "name": "DeepSeek-V2",
+      "architecture": "MoE",
+      "description": "Economical MoE model with 236B total params and only 21B activated per token.",
+      "creator": "DeepSeek",
+      "releaseDate": "2024-05-06",
+      "params": "236B",
+      "context": "128k",
+      "benchmarks": { "mmlu": 78.5, "humanEval": 81.1, "gsm8k": 79.2, "math": 43.6 }
     },
     {
       "id": "gemma-2-27b",
@@ -67,7 +111,29 @@
       "benchmarks": { "mmlu": 81.1, "humanEval": 71.3, "gsm8k": 74.0, "math": 85.0 }
     },
     {
-      "id": "qwen-1.5-72b",
+      "id": "gemma-2-9b",
+      "name": "Gemma 2 9B",
+      "architecture": "Transformer",
+      "description": "Compact Gemma 2 model that outperforms much larger models on many benchmarks.",
+      "creator": "Google",
+      "releaseDate": "2024-06-27",
+      "params": "9B",
+      "context": "8k",
+      "benchmarks": { "mmlu": 71.3, "humanEval": 55.5, "gsm8k": 68.6, "math": 44.3 }
+    },
+    {
+      "id": "internlm2.5-20b",
+      "name": "InternLM2.5 20B",
+      "architecture": "Transformer",
+      "description": "Strong multilingual model with excellent tool use and long-context capabilities.",
+      "creator": "Shanghai AI Lab",
+      "releaseDate": "2024-07-19",
+      "params": "20B",
+      "context": "1M",
+      "benchmarks": { "mmlu": 75.3, "humanEval": 78.9, "gsm8k": 84.0, "math": 51.7 }
+    },
+    {
+      "id": "qwen1.5-72b",
       "name": "Qwen 1.5 72B",
       "architecture": "Transformer",
       "description": "Robust multilingual model with strong reasoning and coding capabilities.",
@@ -76,6 +142,17 @@
       "params": "72B",
       "context": "32k",
       "benchmarks": { "mmlu": 77.5, "humanEval": 71.9, "gsm8k": 82.3, "math": 84.6 }
+    },
+    {
+      "id": "qwen2.5-7b",
+      "name": "Qwen2.5 7B",
+      "architecture": "Transformer",
+      "description": "Efficient 7B model with impressive coding and math performance for its size.",
+      "creator": "Alibaba Cloud",
+      "releaseDate": "2024-09-18",
+      "params": "7B",
+      "context": "128k",
+      "benchmarks": { "mmlu": 74.2, "humanEval": 72.6, "gsm8k": 85.4, "math": 75.5 }
     },
     {
       "id": "mixtral-8x22b",
@@ -89,15 +166,37 @@
       "benchmarks": { "mmlu": 77.3, "humanEval": 75.0, "gsm8k": 71.4, "math": 89.1 }
     },
     {
-      "id": "yi-34b",
-      "name": "Yi-34B",
+      "id": "mixtral-8x7b",
+      "name": "Mixtral 8x7B",
+      "architecture": "MoE",
+      "description": "Groundbreaking open MoE model that outperforms Llama 2 70B at a fraction of the cost.",
+      "creator": "Mistral AI",
+      "releaseDate": "2023-12-11",
+      "params": "47B",
+      "context": "32k",
+      "benchmarks": { "mmlu": 70.6, "humanEval": 40.2, "gsm8k": 74.4, "math": 28.4 }
+    },
+    {
+      "id": "llama-3-70b",
+      "name": "Llama 3 70B",
       "architecture": "Transformer",
-      "description": "Bilingual (English/Chinese) model with strong multilingual capabilities.",
-      "creator": "01.AI",
-      "releaseDate": "2023-11-06",
-      "params": "34B",
-      "context": "200k",
-      "benchmarks": { "mmlu": 76.3, "humanEval": 26.0, "gsm8k": 67.9, "math": null }
+      "description": "Highly capable foundation model trained on massive multilingual datasets.",
+      "creator": "Meta",
+      "releaseDate": "2024-04-18",
+      "params": "70B",
+      "context": "8k",
+      "benchmarks": { "mmlu": 82.0, "humanEval": 81.7, "gsm8k": 79.2, "math": 93.0 }
+    },
+    {
+      "id": "mistral-7b-v0.3",
+      "name": "Mistral 7B v0.3",
+      "architecture": "Transformer",
+      "description": "Best-in-class 7B model with sliding window attention and function calling support.",
+      "creator": "Mistral AI",
+      "releaseDate": "2024-05-22",
+      "params": "7B",
+      "context": "32k",
+      "benchmarks": { "mmlu": 62.5, "humanEval": 36.6, "gsm8k": 52.8, "math": 13.1 }
     },
     {
       "id": "command-r-plus",
@@ -111,6 +210,61 @@
       "benchmarks": { "mmlu": 75.2, "humanEval": 68.1, "gsm8k": 70.0, "math": 81.5 }
     },
     {
+      "id": "command-r",
+      "name": "Command R",
+      "architecture": "Transformer",
+      "description": "Cohere's scalable model optimized for retrieval-augmented generation and tool use.",
+      "creator": "Cohere",
+      "releaseDate": "2024-03-11",
+      "params": "35B",
+      "context": "128k",
+      "benchmarks": { "mmlu": 68.2, "humanEval": 51.7, "gsm8k": 48.8, "math": 31.2 }
+    },
+    {
+      "id": "olmo-2-7b",
+      "name": "OLMo 2 7B",
+      "architecture": "Transformer",
+      "description": "Fully open language model from AI2 with open weights, data, and training code.",
+      "creator": "AI2",
+      "releaseDate": "2024-11-01",
+      "params": "7B",
+      "context": "4k",
+      "benchmarks": { "mmlu": 67.2, "humanEval": 45.2, "gsm8k": 58.4, "math": 22.3 }
+    },
+    {
+      "id": "phi-3.5-mini",
+      "name": "Phi-3.5 Mini",
+      "architecture": "Transformer",
+      "description": "Lightweight 3.8B model with surprisingly strong reasoning and multilingual support.",
+      "creator": "Microsoft",
+      "releaseDate": "2024-08-20",
+      "params": "3.8B",
+      "context": "128k",
+      "benchmarks": { "mmlu": 69.0, "humanEval": 68.4, "gsm8k": 86.2, "math": 48.5 }
+    },
+    {
+      "id": "starcoder2-15b",
+      "name": "StarCoder2 15B",
+      "architecture": "Transformer",
+      "description": "Code-specialized model trained on 600+ programming languages via The Stack v2.",
+      "creator": "BigCode",
+      "releaseDate": "2024-02-28",
+      "params": "15B",
+      "context": "16k",
+      "benchmarks": { "mmlu": 60.1, "humanEval": 46.3, "gsm8k": 50.1, "math": 17.2 }
+    },
+    {
+      "id": "yi-34b",
+      "name": "Yi-34B",
+      "architecture": "Transformer",
+      "description": "Bilingual (English/Chinese) model with strong multilingual capabilities.",
+      "creator": "01.AI",
+      "releaseDate": "2023-11-06",
+      "params": "34B",
+      "context": "200k",
+      "benchmarks": { "mmlu": 76.3, "humanEval": 26.0, "gsm8k": 67.9, "math": null }
+    },
+    {
       "id": "falcon-180b",
       "name": "Falcon 180B",
       "architecture": "Transformer",
@@ -120,6 +274,17 @@
       "params": "180B",
       "context": "2k",
       "benchmarks": { "mmlu": 70.4, "humanEval": null, "gsm8k": 57.8, "math": null }
+    },
+    {
+      "id": "falcon-40b",
+      "name": "Falcon 40B",
+      "architecture": "Transformer",
+      "description": "High-quality open-access model trained on curated web data with multiquery attention.",
+      "creator": "TII",
+      "releaseDate": "2023-05-25",
+      "params": "40B",
+      "context": "2k",
+      "benchmarks": { "mmlu": 55.4, "humanEval": 13.4, "gsm8k": 25.3, "math": null }
     }
   ],
   "diffusion": [
@@ -144,6 +309,36 @@
       "benchmarks": { "fid": 0.92, "clipScore": 0.31, "genSpeed": 1.8 }
     },
     {
+      "id": "hidream-i1-full",
+      "name": "HiDream-I1 Full",
+      "architecture": "Diffusion Transformer",
+      "description": "High-resolution 17B text-to-image model with exceptional photorealism and prompt adherence.",
+      "creator": "HiDream AI",
+      "releaseDate": "2025-03-18",
+      "params": "17B",
+      "benchmarks": { "fid": 0.78, "clipScore": 0.33, "genSpeed": 0.9 }
+    },
+    {
+      "id": "sd-3.5-large",
+      "name": "Stable Diffusion 3.5 Large",
+      "architecture": "Multimodal Diffusion Transformer",
+      "description": "Stability AI's largest open-weight image model with improved prompt adherence.",
+      "creator": "Stability AI",
+      "releaseDate": "2024-10-22",
+      "params": "8B",
+      "benchmarks": { "fid": 1.5, "clipScore": 0.31, "genSpeed": 1.2 }
+    },
+    {
+      "id": "playground-v2.5",
+      "name": "Playground v2.5",
+      "architecture": "Latent Diffusion",
+      "description": "Aesthetic-optimized image generation model fine-tuned for photorealism.",
+      "creator": "Playground AI",
+      "releaseDate": "2024-02-27",
+      "params": "Unknown",
+      "benchmarks": { "fid": 0.9, "clipScore": 0.30, "genSpeed": 2.1 }
+    },
+    {
       "id": "kolors",
       "name": "Kolors",
       "architecture": "Latent Diffusion",
@@ -164,14 +359,14 @@
       "benchmarks": { "fid": 1.2, "clipScore": 0.28, "genSpeed": 1.5 }
     },
     {
-      "id": "sd-3.5-large",
-      "name": "Stable Diffusion 3.5 Large",
-      "architecture": "Multimodal Diffusion Transformer",
-      "description": "Stability AI's largest open-weight image model with improved prompt adherence.",
-      "creator": "Stability AI",
-      "releaseDate": "2024-10-22",
-      "params": "8B",
-      "benchmarks": { "fid": 1.5, "clipScore": 0.31, "genSpeed": 1.2 }
+      "id": "cogview3-plus",
+      "name": "CogView3-Plus",
+      "architecture": "Diffusion Transformer",
+      "description": "Relay diffusion model by Zhipu AI with fast generation and high fidelity.",
+      "creator": "Zhipu AI",
+      "releaseDate": "2024-09-03",
+      "params": "Unknown",
+      "benchmarks": { "fid": 1.6, "clipScore": 0.30, "genSpeed": 1.4 }
     },
     {
       "id": "pixart-sigma",
@@ -184,14 +379,124 @@
       "benchmarks": { "fid": 2.1, "clipScore": 0.29, "genSpeed": 2.4 }
     },
     {
-      "id": "playground-v2.5",
-      "name": "Playground v2.5",
-      "architecture": "Diffusion",
-      "description": "Aesthetic-optimized image generation model fine-tuned for photorealism.",
-      "creator": "Playground AI",
-      "releaseDate": "2024-02-27",
+      "id": "pixart-alpha",
+      "name": "PixArt-α",
+      "architecture": "Diffusion Transformer",
+      "description": "Cost-efficient DiT-based model trained with only 2% of Stable Diffusion's compute.",
+      "creator": "PixArt-alpha",
+      "releaseDate": "2023-10-03",
+      "params": "0.6B",
+      "benchmarks": { "fid": 2.5, "clipScore": 0.28, "genSpeed": 1.8 }
+    },
+    {
+      "id": "sd-3-medium",
+      "name": "Stable Diffusion 3 Medium",
+      "architecture": "Multimodal Diffusion Transformer",
+      "description": "Stability AI's first Multimodal Diffusion Transformer with improved text rendering.",
+      "creator": "Stability AI",
+      "releaseDate": "2024-06-12",
+      "params": "2B",
+      "benchmarks": { "fid": 1.8, "clipScore": 0.30, "genSpeed": 1.4 }
+    },
+    {
+      "id": "sd-2.1",
+      "name": "Stable Diffusion 2.1",
+      "architecture": "Latent Diffusion",
+      "description": "Improved SD 2.0 with better fine-tuning robustness and negative prompt support.",
+      "creator": "Stability AI",
+      "releaseDate": "2022-12-07",
+      "params": "0.9B",
+      "benchmarks": { "fid": 6.5, "clipScore": 0.26, "genSpeed": 3.8 }
+    },
+    {
+      "id": "sd-1.5",
+      "name": "Stable Diffusion 1.5",
+      "architecture": "Latent Diffusion",
+      "description": "The foundational open-source image model that sparked the fine-tuning ecosystem.",
+      "creator": "Stability AI",
+      "releaseDate": "2022-10-20",
+      "params": "0.9B",
+      "benchmarks": { "fid": 9.2, "clipScore": 0.25, "genSpeed": 5.2 }
+    },
+    {
+      "id": "wuerstchen-v2",
+      "name": "Würstchen v2",
+      "architecture": "Latent Diffusion",
+      "description": "Extremely memory-efficient model using a highly compressed latent space.",
+      "creator": "Hugging Face",
+      "releaseDate": "2023-09-13",
+      "params": "1B",
+      "benchmarks": { "fid": 4.1, "clipScore": 0.27, "genSpeed": 3.2 }
+    },
+    {
+      "id": "instaflow-0.9b",
+      "name": "InstaFlow 0.9B",
+      "architecture": "Rectified Flow",
+      "description": "Ultra-fast one-step image generation model derived from Stable Diffusion.",
+      "creator": "NUS / CMU",
+      "releaseDate": "2023-09-11",
+      "params": "0.9B",
+      "benchmarks": { "fid": 13.1, "clipScore": 0.24, "genSpeed": 8.0 }
+    },
+    {
+      "id": "lumina-t2x",
+      "name": "Lumina-T2X",
+      "architecture": "Flow-based Transformer",
+      "description": "Flexible flow-based DiT for unified text-to-image and text-to-video generation.",
+      "creator": "Alpha-VLLM",
+      "releaseDate": "2024-04-05",
+      "params": "2B",
+      "benchmarks": { "fid": 2.8, "clipScore": 0.28, "genSpeed": 1.6 }
+    },
+    {
+      "id": "omnigen-v1",
+      "name": "OmniGen v1",
+      "architecture": "Diffusion Transformer",
+      "description": "Unified image generation model handling text-to-image, editing, and subject-driven tasks.",
+      "creator": "PKU",
+      "releaseDate": "2024-09-16",
+      "params": "3.8B",
+      "benchmarks": { "fid": 2.3, "clipScore": 0.29, "genSpeed": 1.2 }
+    },
+    {
+      "id": "kandinsky-3",
+      "name": "Kandinsky 3.0",
+      "architecture": "Latent Diffusion",
+      "description": "Russian open-source image generation model known for artistic and creative outputs.",
+      "creator": "Sber AI",
+      "releaseDate": "2023-12-06",
       "params": "Unknown",
-      "benchmarks": { "fid": 0.9, "clipScore": 0.30, "genSpeed": 2.1 }
+      "benchmarks": { "fid": 3.2, "clipScore": 0.27, "genSpeed": 1.5 }
+    },
+    {
+      "id": "dreamshaper-xl",
+      "name": "Dreamshaper XL",
+      "architecture": "Latent Diffusion",
+      "description": "Community fine-tune of SDXL known for photorealistic and artistic versatility.",
+      "creator": "Lykon",
+      "releaseDate": "2023-10-20",
+      "params": "3.5B",
+      "benchmarks": { "fid": 1.5, "clipScore": 0.29, "genSpeed": 2.0 }
+    },
+    {
+      "id": "realvisxl-v4",
+      "name": "RealVisXL v4.0",
+      "architecture": "Latent Diffusion",
+      "description": "Photorealism-focused SDXL fine-tune widely used for hyperrealistic portrait generation.",
+      "creator": "SG161222",
+      "releaseDate": "2024-01-15",
+      "params": "3.5B",
+      "benchmarks": { "fid": 1.3, "clipScore": 0.29, "genSpeed": 2.0 }
+    },
+    {
+      "id": "juggernaut-xl",
+      "name": "Juggernaut XL",
+      "architecture": "Latent Diffusion",
+      "description": "Highly rated community model for photorealistic human and scene generation.",
+      "creator": "RunDiffusion",
+      "releaseDate": "2024-01-20",
+      "params": "3.5B",
+      "benchmarks": { "fid": 1.4, "clipScore": 0.30, "genSpeed": 1.8 }
     }
   ],
   "audio": [
@@ -206,24 +511,54 @@
       "benchmarks": { "wer": 3.0, "latency": 0.3, "multilingual": 7.0 }
     },
     {
-      "id": "wav2vec2-large",
-      "name": "Wav2Vec 2.0 Large",
-      "architecture": "Transformer",
-      "description": "Self-supervised speech representation model for high-accuracy ASR.",
-      "creator": "Meta",
-      "releaseDate": "2020-09-17",
-      "params": "317M",
-      "benchmarks": { "wer": 3.0, "latency": 0.5, "multilingual": 1.0 }
+      "id": "parakeet-tdt-1.1b",
+      "name": "Parakeet TDT 1.1B",
+      "architecture": "FastConformer",
+      "description": "NVIDIA's blazing-fast English ASR model setting records on LibriSpeech benchmarks.",
+      "creator": "NVIDIA",
+      "releaseDate": "2024-04-01",
+      "params": "1.1B",
+      "benchmarks": { "wer": 1.9, "latency": 0.2, "multilingual": 1.0 }
     },
     {
-      "id": "whisper-v3",
+      "id": "whisper-large-v3",
       "name": "Whisper v3",
       "architecture": "Transformer",
       "description": "Robust speech recognition model with strong multilingual performance.",
       "creator": "OpenAI",
       "releaseDate": "2023-11-06",
       "params": "1550M",
-      "benchmarks": { "wer": 4.2, "latency": 0.8, "multilingual": 95.0 }
+      "benchmarks": { "wer": 2.7, "latency": 0.8, "multilingual": 95.0 }
+    },
+    {
+      "id": "whisper-large-v2",
+      "name": "Whisper Large v2",
+      "architecture": "Transformer",
+      "description": "Highly accurate multilingual ASR model trained on 680k hours of supervised audio.",
+      "creator": "OpenAI",
+      "releaseDate": "2022-12-06",
+      "params": "1550M",
+      "benchmarks": { "wer": 3.0, "latency": 1.1, "multilingual": 96.0 }
+    },
+    {
+      "id": "whisper-medium",
+      "name": "Whisper Medium",
+      "architecture": "Transformer",
+      "description": "Balanced multilingual ASR model offering a strong accuracy-to-speed trade-off.",
+      "creator": "OpenAI",
+      "releaseDate": "2022-09-21",
+      "params": "307M",
+      "benchmarks": { "wer": 4.2, "latency": 0.5, "multilingual": 96.0 }
+    },
+    {
+      "id": "whisper-small",
+      "name": "Whisper Small",
+      "architecture": "Transformer",
+      "description": "Compact and fast multilingual ASR model suitable for edge deployment.",
+      "creator": "OpenAI",
+      "releaseDate": "2022-09-21",
+      "params": "244M",
+      "benchmarks": { "wer": 6.7, "latency": 0.3, "multilingual": 96.0 }
     },
     {
       "id": "seamless-m4t-v2",
@@ -236,6 +571,16 @@
       "benchmarks": { "wer": 4.8, "latency": 1.2, "multilingual": 98.5 }
     },
     {
+      "id": "wav2vec2-large",
+      "name": "Wav2Vec 2.0 Large",
+      "architecture": "Transformer",
+      "description": "Self-supervised speech representation model for high-accuracy ASR.",
+      "creator": "Meta",
+      "releaseDate": "2020-09-17",
+      "params": "317M",
+      "benchmarks": { "wer": 3.0, "latency": 0.5, "multilingual": 1.0 }
+    },
+    {
       "id": "mms",
       "name": "MMS",
       "architecture": "Transformer",
@@ -244,6 +589,46 @@
       "releaseDate": "2023-05-22",
       "params": "1B",
       "benchmarks": { "wer": 5.0, "latency": 0.9, "multilingual": 99.0 }
+    },
+    {
+      "id": "hubert-large",
+      "name": "HuBERT Large",
+      "architecture": "Transformer",
+      "description": "Self-supervised audio model learning discrete speech units via masked prediction.",
+      "creator": "Meta",
+      "releaseDate": "2021-06-14",
+      "params": "316M",
+      "benchmarks": { "wer": 3.3, "latency": 0.6, "multilingual": 1.0 }
+    },
+    {
+      "id": "speecht5",
+      "name": "SpeechT5",
+      "architecture": "Encoder-Decoder Transformer",
+      "description": "Unified pre-trained model for speech recognition and text-to-speech synthesis.",
+      "creator": "Microsoft",
+      "releaseDate": "2022-05-05",
+      "params": "308M",
+      "benchmarks": { "wer": 6.2, "latency": 0.4, "multilingual": 2.0 }
+    },
+    {
+      "id": "xtts-v2",
+      "name": "XTTS v2",
+      "architecture": "Transformer",
+      "description": "Cross-lingual TTS model capable of voice cloning in 17 languages from 3 seconds of audio.",
+      "creator": "Coqui AI",
+      "releaseDate": "2023-11-24",
+      "params": "467M",
+      "benchmarks": { "wer": null, "latency": 1.5, "multilingual": 17.0 }
+    },
+    {
+      "id": "musicgen-large",
+      "name": "MusicGen Large",
+      "architecture": "Transformer",
+      "description": "Autoregressive model for conditional music generation from text and melody prompts.",
+      "creator": "Meta",
+      "releaseDate": "2023-06-12",
+      "params": "3.3B",
+      "benchmarks": { "wer": null, "latency": 4.0, "multilingual": 1.0 }
     },
     {
       "id": "bark",
@@ -264,6 +649,56 @@
       "releaseDate": "2024-06-05",
       "params": "Unknown",
       "benchmarks": { "wer": null, "latency": 2.5, "multilingual": null }
+    },
+    {
+      "id": "vocos",
+      "name": "Vocos",
+      "architecture": "Transformer",
+      "description": "High-fidelity neural vocoder that reconstructs audio 3x faster than HiFi-GAN.",
+      "creator": "Hubert Siuzdak",
+      "releaseDate": "2023-06-05",
+      "params": "13M",
+      "benchmarks": { "wer": null, "latency": 0.1, "multilingual": 1.0 }
+    },
+    {
+      "id": "whisperx",
+      "name": "WhisperX",
+      "architecture": "Transformer",
+      "description": "Faster Whisper with word-level timestamps and speaker diarization support.",
+      "creator": "m-bain",
+      "releaseDate": "2023-04-03",
+      "params": "1550M",
+      "benchmarks": { "wer": 2.5, "latency": 0.4, "multilingual": 96.0 }
+    },
+    {
+      "id": "nemo-fastconformer",
+      "name": "NeMo FastConformer",
+      "architecture": "FastConformer",
+      "description": "NVIDIA's efficient conformer-based ASR model with 8x faster inference than standard conformers.",
+      "creator": "NVIDIA",
+      "releaseDate": "2023-09-01",
+      "params": "115M",
+      "benchmarks": { "wer": 2.1, "latency": 0.3, "multilingual": 14.0 }
+    },
+    {
+      "id": "moonshine-base",
+      "name": "Moonshine Base",
+      "architecture": "Transformer",
+      "description": "Ultra-efficient English ASR model designed for real-time edge and on-device inference.",
+      "creator": "Useful Sensors",
+      "releaseDate": "2024-10-17",
+      "params": "61M",
+      "benchmarks": { "wer": 2.8, "latency": 0.2, "multilingual": 1.0 }
+    },
+    {
+      "id": "encodec",
+      "name": "EnCodec",
+      "architecture": "Convolutional",
+      "description": "High-fidelity neural audio codec enabling low-bitrate audio compression and synthesis.",
+      "creator": "Meta",
+      "releaseDate": "2022-10-24",
+      "params": "Unknown",
+      "benchmarks": { "wer": null, "latency": 0.2, "multilingual": 1.0 }
     }
   ]
 }

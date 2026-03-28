@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import modelsData from "@/data/models.json";
 import { BenchmarkTooltip } from "@/components/BenchmarkTooltip";
@@ -144,7 +145,9 @@ export default function LeaderboardPage() {
                   </div>
                 </td>
                 <td className="px-6 py-4 font-bold text-white group-hover:text-primary transition-colors">
-                  {model.name}
+                  <Link href={`/models/${activeCategory}/${model.id}`} className="hover:underline">
+                    {model.name}
+                  </Link>
                 </td>
                 <td className="px-6 py-4 text-gray-500">{model.params}</td>
                 {config.columns.map((col) => {
