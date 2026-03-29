@@ -23,13 +23,15 @@ interface CategoryConfig {
 
 const categoryConfig: Record<Category, CategoryConfig> = {
   llm: {
-    sortKey: "mmlu",
+    sortKey: "mmluPro",
     sortAscending: false,
     columns: [
-      { key: "mmlu", label: "MMLU", description: "Massive Multitask Language Understanding — tests general knowledge across 57 subjects.", lowerIsBetter: false },
-      { key: "humanEval", label: "HumanEval", description: "Code generation accuracy on 164 hand-written Python programming problems.", lowerIsBetter: false },
-      { key: "gsm8k", label: "GSM8K", description: "Grade-school math word problems requiring multi-step arithmetic reasoning.", lowerIsBetter: false },
-      { key: "math", label: "Math", description: "Competition-level math problems drawn from AMC and AIME challenges.", lowerIsBetter: false },
+      { key: "mmluPro", label: "MMLU-Pro", description: "Massive Multitask Language Understanding Pro — harder, 10-choice version spanning 57 academic subjects.", lowerIsBetter: false },
+      { key: "bbh", label: "BBH", description: "Big Bench Hard — 23 challenging multi-step reasoning tasks requiring chain-of-thought.", lowerIsBetter: false },
+      { key: "gpqa", label: "GPQA", description: "Graduate-Level Google-Proof Q&A — PhD-level questions across biology, chemistry, and physics.", lowerIsBetter: false },
+      { key: "mathHard", label: "MATH", description: "Competition-level mathematics problems from AMC/AIME, testing symbolic and algebraic reasoning.", lowerIsBetter: false },
+      { key: "ifeval", label: "IFEval", description: "Instruction Following Evaluation — strict accuracy on verifiable formatting and constraint instructions.", lowerIsBetter: false },
+      { key: "musr", label: "MuSR", description: "Multi-step Soft Reasoning — complex narrative reasoning over murder mysteries and object tracking.", lowerIsBetter: false },
     ],
   },
   diffusion: {

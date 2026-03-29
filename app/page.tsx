@@ -113,8 +113,8 @@ function ModelCard({ model }: { model: (typeof modelsData.llm)[number] }) {
             <span className="font-mono text-white text-sm">{model.params}</span>
           </div>
           <div className="flex flex-col gap-1">
-            <span className="text-[10px] text-gray-500 font-mono uppercase">MMLU</span>
-            <span className="font-mono text-primary text-sm">{model.benchmarks.mmlu}%</span>
+            <span className="text-[10px] text-gray-500 font-mono uppercase">MMLU-Pro</span>
+            <span className="font-mono text-primary text-sm">{model.benchmarks.mmluPro != null ? `${model.benchmarks.mmluPro}%` : "—"}</span>
           </div>
           <div className="flex flex-col gap-1">
             <span className="text-[10px] text-gray-500 font-mono uppercase">Context</span>

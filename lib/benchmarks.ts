@@ -7,36 +7,52 @@ export interface BenchmarkMeta {
 }
 
 export const benchmarkMeta: Record<string, BenchmarkMeta> = {
-  mmlu: {
-    key: "mmlu",
-    label: "MMLU",
+  bbh: {
+    key: "bbh",
+    label: "BBH",
     unit: "%",
     description:
-      "Massive Multitask Language Understanding — tests general knowledge across 57 subjects.",
+      "Big Bench Hard — 23 challenging multi-step reasoning tasks requiring chain-of-thought.",
     lowerIsBetter: false,
   },
-  humanEval: {
-    key: "humanEval",
-    label: "HumanEval",
+  gpqa: {
+    key: "gpqa",
+    label: "GPQA",
     unit: "%",
     description:
-      "Code generation accuracy on 164 hand-written Python programming problems.",
+      "Graduate-Level Google-Proof Q&A — PhD-level questions across biology, chemistry, and physics.",
     lowerIsBetter: false,
   },
-  gsm8k: {
-    key: "gsm8k",
-    label: "GSM8K",
+  mathHard: {
+    key: "mathHard",
+    label: "MATH",
     unit: "%",
     description:
-      "Grade-school math word problems requiring multi-step arithmetic reasoning.",
+      "Competition-level mathematics problems from AMC/AIME, testing symbolic and algebraic reasoning.",
     lowerIsBetter: false,
   },
-  math: {
-    key: "math",
-    label: "Math",
+  musr: {
+    key: "musr",
+    label: "MuSR",
     unit: "%",
     description:
-      "Competition-level math problems drawn from AMC and AIME challenges.",
+      "Multi-step Soft Reasoning — complex narrative reasoning over murder mysteries, object tracking, and team allocation.",
+    lowerIsBetter: false,
+  },
+  ifeval: {
+    key: "ifeval",
+    label: "IFEval",
+    unit: "%",
+    description:
+      "Instruction Following Evaluation — strict accuracy on verifiable formatting and constraint instructions.",
+    lowerIsBetter: false,
+  },
+  mmluPro: {
+    key: "mmluPro",
+    label: "MMLU-Pro",
+    unit: "%",
+    description:
+      "Massive Multitask Language Understanding Pro — harder, 10-choice version spanning 57 academic subjects.",
     lowerIsBetter: false,
   },
   fid: {
@@ -92,7 +108,7 @@ export const benchmarkMeta: Record<string, BenchmarkMeta> = {
 export type Category = "llm" | "diffusion" | "audio";
 
 export const categoryBenchmarks: Record<Category, string[]> = {
-  llm: ["mmlu", "humanEval", "gsm8k", "math"],
+  llm: ["bbh", "gpqa", "mathHard", "musr", "ifeval", "mmluPro"],
   diffusion: ["fid", "clipScore", "genSpeed"],
   audio: ["wer", "latency", "multilingual"],
 };

@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2026-03-29
+
+### Added
+- **HuggingFace leaderboard integration:** New `scripts/fetch-hf-leaderboard.ts` fetches real evaluation results from the HuggingFace Open LLM Leaderboard v2 dataset (`open-llm-leaderboard/results`). Covers 15 major organizations and 200+ models.
+- **43 real LLM entries:** Replaced manually-estimated benchmark values with verified evaluations from 43 curated open-source LLMs across all major families (Qwen, Llama, Mistral, Gemma, Phi, Falcon, Yi, InternLM, DeepSeek distills, Command R, Hermes, Tulu).
+- **LLM benchmark suite upgrade (v1 → v2):** Replaced MMLU/HumanEval/GSM8K/MATH with the HF Leaderboard v2 suite — BBH, GPQA, MATH Hard, MuSR, IFEval, MMLU-Pro. These are harder and better discriminate modern model capabilities.
+- **Merge script:** `scripts/merge-hf-models.ts` for curating and writing the leaderboard data into `models.json` with proper metadata overrides.
+
+### Changed
+- **Leaderboard page:** LLM columns now show MMLU-Pro, BBH, GPQA, MATH, IFEval, MuSR. Default sort by MMLU-Pro.
+- **Home page card:** MMLU metric replaced with MMLU-Pro.
+
 ## [0.7.0] - 2026-03-29
 
 ### Added

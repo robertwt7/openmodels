@@ -1,290 +1,778 @@
 {
   "llm": [
     {
-      "id": "llama-3.1-405b",
-      "name": "Llama 3.1 405B",
-      "architecture": "Transformer",
-      "description": "Meta's largest open-weights model, competitive with GPT-4 class systems.",
-      "creator": "Meta",
-      "releaseDate": "2024-07-23",
-      "params": "405B",
-      "context": "128k",
-      "benchmarks": { "mmlu": 88.6, "humanEval": 89.0, "gsm8k": 96.8, "math": 73.8 }
-    },
-    {
-      "id": "deepseek-r1",
-      "name": "DeepSeek-R1",
-      "architecture": "MoE",
-      "description": "Reasoning-first open model matching o1 on math and coding via reinforcement learning.",
-      "creator": "DeepSeek",
-      "releaseDate": "2025-01-20",
-      "params": "671B",
-      "context": "128k",
-      "benchmarks": { "mmlu": 90.8, "humanEval": 92.9, "gsm8k": 97.3, "math": 92.3 }
-    },
-    {
-      "id": "deepseek-v3",
-      "name": "DeepSeek-V3",
-      "architecture": "MoE",
-      "description": "Open-source mixture-of-experts model rivaling frontier closed models.",
-      "creator": "DeepSeek",
-      "releaseDate": "2024-12-26",
-      "params": "671B",
-      "context": "128k",
-      "benchmarks": { "mmlu": 88.5, "humanEval": 82.6, "gsm8k": 89.3, "math": 61.6 }
-    },
-    {
-      "id": "qwen2.5-72b",
+      "id": "qwen-qwen2-5-72b",
       "name": "Qwen2.5 72B",
       "architecture": "Transformer",
-      "description": "Alibaba's flagship open model with strong math, coding, and multilingual capabilities.",
+      "description": "Qwen2.5 base 72B — Alibaba's most capable open-weights dense model.",
       "creator": "Alibaba Cloud",
       "releaseDate": "2024-09-18",
       "params": "72B",
       "context": "128k",
-      "benchmarks": { "mmlu": 87.0, "humanEval": 86.0, "gsm8k": 91.6, "math": 83.1 }
+      "benchmarks": {
+        "bbh": 67.82,
+        "gpqa": 40.52,
+        "mathHard": 36.1,
+        "musr": 47.62,
+        "ifeval": 46.88,
+        "mmluPro": 59.68
+      }
     },
     {
-      "id": "mistral-large-2",
-      "name": "Mistral Large 2",
+      "id": "qwen-qwq-32b-preview",
+      "name": "QwQ 32B Preview",
       "architecture": "Transformer",
-      "description": "Frontier-class open-weight model with strong coding and reasoning.",
+      "description": "Qwen's reasoning-focused 32B model with chain-of-thought training, competitive with much larger models.",
+      "creator": "Alibaba Cloud",
+      "releaseDate": "2024-11-27",
+      "params": "32B",
+      "context": "32k",
+      "benchmarks": {
+        "bbh": 66.64,
+        "gpqa": 28.19,
+        "mathHard": 22.89,
+        "musr": 41.01,
+        "ifeval": 46.88,
+        "mmluPro": 56.78
+      }
+    },
+    {
+      "id": "qwen-qwen2-5-32b-instruct",
+      "name": "Qwen2.5 32B Instruct",
+      "architecture": "Transformer",
+      "description": "Alibaba's 32B instruction-tuned model balancing performance and deployment efficiency.",
+      "creator": "Alibaba Cloud",
+      "releaseDate": "2024-09-18",
+      "params": "32B",
+      "context": "128k",
+      "benchmarks": {
+        "bbh": 68.74,
+        "gpqa": 33.81,
+        "mathHard": 0,
+        "musr": 42.46,
+        "ifeval": 86.33,
+        "mmluPro": 56.67
+      }
+    },
+    {
+      "id": "qwen-qwen2-5-72b-instruct",
+      "name": "Qwen2.5 72B Instruct",
+      "architecture": "Transformer",
+      "description": "Alibaba's flagship 72B instruction-tuned model with strong math, coding, and multilingual performance.",
+      "creator": "Alibaba Cloud",
+      "releaseDate": "2024-09-18",
+      "params": "72B",
+      "context": "128k",
+      "benchmarks": {
+        "bbh": 72.56,
+        "gpqa": 37.5,
+        "mathHard": 1.21,
+        "musr": 41.93,
+        "ifeval": 88.85,
+        "mmluPro": 56.26
+      }
+    },
+    {
+      "id": "mistralai-mistral-large-instruct-2411",
+      "name": "Mistral Large 2411",
+      "architecture": "Transformer",
+      "description": "Mistral AI's flagship large model (November 2024), with leading performance among open weights.",
       "creator": "Mistral AI",
-      "releaseDate": "2024-07-24",
+      "releaseDate": "2024-11-18",
       "params": "123B",
       "context": "128k",
-      "benchmarks": { "mmlu": 84.0, "humanEval": 92.0, "gsm8k": 93.0, "math": 70.8 }
+      "benchmarks": {
+        "bbh": 67,
+        "gpqa": 43.71,
+        "mathHard": 1.13,
+        "musr": 45.24,
+        "ifeval": 87.05,
+        "mmluPro": 55.62
+      }
     },
     {
-      "id": "llama-3.3-70b",
-      "name": "Llama 3.3 70B",
+      "id": "mistralai-mistral-small-24b-base-2501",
+      "name": "Mistral Small 24B",
       "architecture": "Transformer",
-      "description": "Instruction-tuned 70B model matching Llama 3.1 405B on most benchmarks.",
+      "description": "Mistral AI's efficient 24B model offering high performance-per-parameter for deployment.",
+      "creator": "Mistral AI",
+      "releaseDate": "2025-01-30",
+      "params": "24B",
+      "context": "32k",
+      "benchmarks": {
+        "bbh": 64.29,
+        "gpqa": 38.76,
+        "mathHard": 18.96,
+        "musr": 42.33,
+        "ifeval": 22.54,
+        "mmluPro": 54.06
+      }
+    },
+    {
+      "id": "qwen-qwen2-72b-instruct",
+      "name": "Qwen2 72B Instruct",
+      "architecture": "Transformer",
+      "description": "Alibaba's Qwen2 generation 72B model, excelling at multilingual tasks and instruction following.",
+      "creator": "Alibaba Cloud",
+      "releaseDate": "2024-06-06",
+      "params": "72B",
+      "context": "128k",
+      "benchmarks": {
+        "bbh": 69.66,
+        "gpqa": 37.25,
+        "mathHard": 35.12,
+        "musr": 45.5,
+        "ifeval": 83.81,
+        "mmluPro": 54.03
+      }
+    },
+    {
+      "id": "meta-llama-llama-3-3-70b-instruct",
+      "name": "Llama 3.3 70B Instruct",
+      "architecture": "Transformer",
+      "description": "Meta's latest 70B instruction model with improved reasoning and instruction-following over 3.1.",
       "creator": "Meta",
-      "releaseDate": "2024-12-06",
+      "releaseDate": "2024-12-05",
       "params": "70B",
       "context": "128k",
-      "benchmarks": { "mmlu": 86.0, "humanEval": 88.4, "gsm8k": 95.1, "math": 77.0 }
+      "benchmarks": {
+        "bbh": 69.15,
+        "gpqa": 32.89,
+        "mathHard": 0.23,
+        "musr": 44.44,
+        "ifeval": 91.97,
+        "mmluPro": 53.32
+      }
     },
     {
-      "id": "llama-3.2-90b",
-      "name": "Llama 3.2 90B",
+      "id": "meta-llama-llama-3-1-70b-instruct",
+      "name": "Llama 3.1 70B Instruct",
       "architecture": "Transformer",
-      "description": "Meta's multimodal vision-language model supporting image and text inputs.",
+      "description": "Meta's 70B instruction-tuned model with 128k context, competitive with GPT-4o class systems.",
       "creator": "Meta",
-      "releaseDate": "2024-09-25",
-      "params": "90B",
+      "releaseDate": "2024-07-23",
+      "params": "70B",
       "context": "128k",
-      "benchmarks": { "mmlu": 86.0, "humanEval": 80.2, "gsm8k": 88.5, "math": 68.0 }
+      "benchmarks": {
+        "bbh": 69.15,
+        "gpqa": 35.65,
+        "mathHard": 28.02,
+        "musr": 45.63,
+        "ifeval": 89.09,
+        "mmluPro": 53.09
+      }
     },
     {
-      "id": "phi-4",
+      "id": "microsoft-phi-4",
       "name": "Phi-4",
       "architecture": "Transformer",
-      "description": "Microsoft's small model that punches above its weight on reasoning tasks.",
+      "description": "Microsoft's 14B Phi-4 model trained on high-quality synthetic data, punching above its weight class.",
       "creator": "Microsoft",
       "releaseDate": "2024-12-12",
       "params": "14B",
       "context": "16k",
-      "benchmarks": { "mmlu": 84.8, "humanEval": 82.6, "gsm8k": 91.5, "math": 80.4 }
+      "benchmarks": {
+        "bbh": 66.74,
+        "gpqa": 40.6,
+        "mathHard": 26.51,
+        "musr": 50.26,
+        "ifeval": 6.71,
+        "mmluPro": 52.87
+      }
     },
     {
-      "id": "deepseek-v2",
-      "name": "DeepSeek-V2",
-      "architecture": "MoE",
-      "description": "Economical MoE model with 236B total params and only 21B activated per token.",
-      "creator": "DeepSeek",
-      "releaseDate": "2024-05-06",
-      "params": "236B",
-      "context": "128k",
-      "benchmarks": { "mmlu": 78.5, "humanEval": 81.1, "gsm8k": 79.2, "math": 43.6 }
-    },
-    {
-      "id": "gemma-2-27b",
-      "name": "Gemma 2 27B",
+      "id": "meta-llama-meta-llama-3-70b-instruct",
+      "name": "Llama 3 70B Instruct",
       "architecture": "Transformer",
-      "description": "Google's lightweight, state-of-the-art open model.",
-      "creator": "Google",
-      "releaseDate": "2024-06-27",
-      "params": "27B",
-      "context": "8k",
-      "benchmarks": { "mmlu": 81.1, "humanEval": 71.3, "gsm8k": 74.0, "math": 85.0 }
-    },
-    {
-      "id": "gemma-2-9b",
-      "name": "Gemma 2 9B",
-      "architecture": "Transformer",
-      "description": "Compact Gemma 2 model that outperforms much larger models on many benchmarks.",
-      "creator": "Google",
-      "releaseDate": "2024-06-27",
-      "params": "9B",
-      "context": "8k",
-      "benchmarks": { "mmlu": 71.3, "humanEval": 55.5, "gsm8k": 68.6, "math": 44.3 }
-    },
-    {
-      "id": "internlm2.5-20b",
-      "name": "InternLM2.5 20B",
-      "architecture": "Transformer",
-      "description": "Strong multilingual model with excellent tool use and long-context capabilities.",
-      "creator": "Shanghai AI Lab",
-      "releaseDate": "2024-07-19",
-      "params": "20B",
-      "context": "1M",
-      "benchmarks": { "mmlu": 75.3, "humanEval": 78.9, "gsm8k": 84.0, "math": 51.7 }
-    },
-    {
-      "id": "qwen1.5-72b",
-      "name": "Qwen 1.5 72B",
-      "architecture": "Transformer",
-      "description": "Robust multilingual model with strong reasoning and coding capabilities.",
-      "creator": "Alibaba Cloud",
-      "releaseDate": "2024-02-04",
-      "params": "72B",
-      "context": "32k",
-      "benchmarks": { "mmlu": 77.5, "humanEval": 71.9, "gsm8k": 82.3, "math": 84.6 }
-    },
-    {
-      "id": "qwen2.5-7b",
-      "name": "Qwen2.5 7B",
-      "architecture": "Transformer",
-      "description": "Efficient 7B model with impressive coding and math performance for its size.",
-      "creator": "Alibaba Cloud",
-      "releaseDate": "2024-09-18",
-      "params": "7B",
-      "context": "128k",
-      "benchmarks": { "mmlu": 74.2, "humanEval": 72.6, "gsm8k": 85.4, "math": 75.5 }
-    },
-    {
-      "id": "mixtral-8x22b",
-      "name": "Mixtral 8x22B",
-      "architecture": "MoE",
-      "description": "Sparse mixture-of-experts model providing high performance at lower inference cost.",
-      "creator": "Mistral AI",
-      "releaseDate": "2024-04-10",
-      "params": "141B",
-      "context": "64k",
-      "benchmarks": { "mmlu": 77.3, "humanEval": 75.0, "gsm8k": 71.4, "math": 89.1 }
-    },
-    {
-      "id": "mixtral-8x7b",
-      "name": "Mixtral 8x7B",
-      "architecture": "MoE",
-      "description": "Groundbreaking open MoE model that outperforms Llama 2 70B at a fraction of the cost.",
-      "creator": "Mistral AI",
-      "releaseDate": "2023-12-11",
-      "params": "47B",
-      "context": "32k",
-      "benchmarks": { "mmlu": 70.6, "humanEval": 40.2, "gsm8k": 74.4, "math": 28.4 }
-    },
-    {
-      "id": "llama-3-70b",
-      "name": "Llama 3 70B",
-      "architecture": "Transformer",
-      "description": "Highly capable foundation model trained on massive multilingual datasets.",
+      "description": "Meta Llama 3 70B instruction model — the original Llama 3 large variant.",
       "creator": "Meta",
       "releaseDate": "2024-04-18",
       "params": "70B",
       "context": "8k",
-      "benchmarks": { "mmlu": 82.0, "humanEval": 81.7, "gsm8k": 79.2, "math": 93.0 }
+      "benchmarks": {
+        "bbh": 65.25,
+        "gpqa": 28.69,
+        "mathHard": 23.34,
+        "musr": 41.4,
+        "ifeval": 84.53,
+        "mmluPro": 52.07
+      }
     },
     {
-      "id": "mistral-7b-v0.3",
-      "name": "Mistral 7B v0.3",
+      "id": "qwen-qwen2-5-14b-instruct",
+      "name": "Qwen2.5 14B Instruct",
       "architecture": "Transformer",
-      "description": "Best-in-class 7B model with sliding window attention and function calling support.",
+      "description": "Qwen2.5 14B instruction model — strong mid-size performer across reasoning and coding tasks.",
+      "creator": "Alibaba Cloud",
+      "releaseDate": "2024-09-18",
+      "params": "14B",
+      "context": "128k",
+      "benchmarks": {
+        "bbh": 63.74,
+        "gpqa": 32.21,
+        "mathHard": 0,
+        "musr": 40.87,
+        "ifeval": 84.41,
+        "mmluPro": 49.04
+      }
+    },
+    {
+      "id": "deepseek-ai-deepseek-r1-distill-llama-70b",
+      "name": "DeepSeek R1 Distill Llama 70B",
+      "architecture": "Transformer",
+      "description": "DeepSeek R1 reasoning capability distilled into a Llama 3.1 70B base — competitive with much larger models on math and reasoning.",
+      "creator": "DeepSeek",
+      "releaseDate": "2025-01-20",
+      "params": "70B",
+      "context": "128k",
+      "benchmarks": {
+        "bbh": 56.22,
+        "gpqa": 26.51,
+        "mathHard": 8.91,
+        "musr": 43.25,
+        "ifeval": 50.12,
+        "mmluPro": 47.48
+      }
+    },
+    {
+      "id": "nousresearch-hermes-3-llama-3-1-70b",
+      "name": "Hermes 3 Llama 3.1 70B",
+      "architecture": "Transformer",
+      "description": "Nous Research's Hermes 3 fine-tune on Llama 3.1 70B with enhanced tool-use and instruction following.",
+      "creator": "Nous Research",
+      "releaseDate": "2024-08-09",
+      "params": "70B",
+      "context": "128k",
+      "benchmarks": {
+        "bbh": 67.38,
+        "gpqa": 36.16,
+        "mathHard": 13.75,
+        "musr": 49.34,
+        "ifeval": 80.22,
+        "mmluPro": 47.27
+      }
+    },
+    {
+      "id": "deepseek-ai-deepseek-r1-distill-qwen-32b",
+      "name": "DeepSeek R1 Distill Qwen 32B",
+      "architecture": "Transformer",
+      "description": "DeepSeek R1 reasoning distilled into Qwen 2.5 32B — strong math and coding in a deployable size.",
+      "creator": "DeepSeek",
+      "releaseDate": "2025-01-20",
+      "params": "32B",
+      "context": "128k",
+      "benchmarks": {
+        "bbh": 41.76,
+        "gpqa": 28.44,
+        "mathHard": 0,
+        "musr": 45.11,
+        "ifeval": 49.16,
+        "mmluPro": 46.87
+      }
+    },
+    {
+      "id": "microsoft-phi-3-medium-4k-instruct",
+      "name": "Phi-3 Medium 14B",
+      "architecture": "Transformer",
+      "description": "Microsoft's 14B Phi-3 instruction model with strong reasoning despite compact size.",
+      "creator": "Microsoft",
+      "releaseDate": "2024-05-21",
+      "params": "14B",
+      "context": "4k",
+      "benchmarks": {
+        "bbh": 63.81,
+        "gpqa": 33.64,
+        "mathHard": 16.99,
+        "musr": 42.46,
+        "ifeval": 69.3,
+        "mmluPro": 46.76
+      }
+    },
+    {
+      "id": "deepseek-ai-deepseek-r1-distill-qwen-14b",
+      "name": "DeepSeek R1 Distill Qwen 14B",
+      "architecture": "Transformer",
+      "description": "DeepSeek R1 reasoning capability distilled into Qwen 2.5 14B, outperforming GPT-4o on benchmarks.",
+      "creator": "DeepSeek",
+      "releaseDate": "2025-01-20",
+      "params": "14B",
+      "context": "128k",
+      "benchmarks": {
+        "bbh": 59.12,
+        "gpqa": 38.76,
+        "mathHard": 40.86,
+        "musr": 53.57,
+        "ifeval": 50.48,
+        "mmluPro": 46.67
+      }
+    },
+    {
+      "id": "microsoft-phi-3-5-moe-instruct",
+      "name": "Phi-3.5 MoE Instruct",
+      "architecture": "MoE",
+      "description": "Microsoft's 42B MoE model with 6.6B active parameters, strong reasoning in a small footprint.",
+      "creator": "Microsoft",
+      "releaseDate": "2024-08-20",
+      "params": "42B",
+      "context": "128k",
+      "benchmarks": {
+        "bbh": 63.98,
+        "gpqa": 35.57,
+        "mathHard": 20.54,
+        "musr": 45.5,
+        "ifeval": 73.98,
+        "mmluPro": 46.58
+      }
+    },
+    {
+      "id": "meta-llama-llama-3-1-70b",
+      "name": "Llama 3.1 70B",
+      "architecture": "Transformer",
+      "description": "Meta Llama 3.1 base 70B — strong open-weights model for fine-tuning and research.",
+      "creator": "Meta",
+      "releaseDate": "2024-07-23",
+      "params": "70B",
+      "context": "128k",
+      "benchmarks": {
+        "bbh": 62.71,
+        "gpqa": 38.76,
+        "mathHard": 16.69,
+        "musr": 45.63,
+        "ifeval": 22.78,
+        "mmluPro": 46.54
+      }
+    },
+    {
+      "id": "allenai-llama-3-1-tulu-3-70b",
+      "name": "Tulu 3 70B",
+      "architecture": "Transformer",
+      "description": "Allen AI's Tulu 3 fine-tune on Llama 3.1 70B using RLVR training with open data and recipes.",
+      "creator": "Allen AI",
+      "releaseDate": "2024-11-19",
+      "params": "70B",
+      "context": "128k",
+      "benchmarks": {
+        "bbh": 61.29,
+        "gpqa": 37.33,
+        "mathHard": 38.22,
+        "musr": 49.34,
+        "ifeval": 85.97,
+        "mmluPro": 46.45
+      }
+    },
+    {
+      "id": "01-ai-yi-1-5-34b-chat",
+      "name": "Yi-1.5 34B Chat",
+      "architecture": "Transformer",
+      "description": "01.AI's Yi-1.5 chat model at 34B — competitive multilingual performance with 200k context support.",
+      "creator": "01.AI",
+      "releaseDate": "2024-05-13",
+      "params": "34B",
+      "context": "4k",
+      "benchmarks": {
+        "bbh": 60.65,
+        "gpqa": 36.49,
+        "mathHard": 23.34,
+        "musr": 42.72,
+        "ifeval": 66.07,
+        "mmluPro": 45.2
+      }
+    },
+    {
+      "id": "mistralai-mixtral-8x22b-instruct-v0-1",
+      "name": "Mixtral 8×22B Instruct",
+      "architecture": "MoE",
+      "description": "Mistral's large sparse mixture-of-experts model with 141B total and 39B active parameters.",
+      "creator": "Mistral AI",
+      "releaseDate": "2024-04-10",
+      "params": "141B",
+      "context": "64k",
+      "benchmarks": {
+        "bbh": 61.1,
+        "gpqa": 37.33,
+        "mathHard": 18.73,
+        "musr": 42.99,
+        "ifeval": 76.02,
+        "mmluPro": 44.83
+      }
+    },
+    {
+      "id": "google-gemma-2-27b-it",
+      "name": "Gemma 2 27B IT",
+      "architecture": "Transformer",
+      "description": "Google's 27B instruction-tuned Gemma 2 model using novel interleaved attention architecture.",
+      "creator": "Google",
+      "releaseDate": "2024-06-27",
+      "params": "27B",
+      "context": "8k",
+      "benchmarks": {
+        "bbh": 64.22,
+        "gpqa": 37.5,
+        "mathHard": 0.68,
+        "musr": 40.21,
+        "ifeval": 83.21,
+        "mmluPro": 44.51
+      }
+    },
+    {
+      "id": "tiiuae-falcon3-10b-instruct",
+      "name": "Falcon3 10B Instruct",
+      "architecture": "Transformer",
+      "description": "TII's Falcon3 10B instruction model, trained with efficiency optimizations for compute budget.",
+      "creator": "TII",
+      "releaseDate": "2024-12-04",
+      "params": "10B",
+      "context": "32k",
+      "benchmarks": {
+        "bbh": 61.48,
+        "gpqa": 32.89,
+        "mathHard": 25.91,
+        "musr": 43.12,
+        "ifeval": 81.65,
+        "mmluPro": 44.29
+      }
+    },
+    {
+      "id": "cohereforai-c4ai-command-r-plus-08-2024",
+      "name": "Command R+ (Aug 2024)",
+      "architecture": "Transformer",
+      "description": "Cohere's powerful Command R+ model optimized for RAG, tool use, and multi-step reasoning.",
+      "creator": "Cohere",
+      "releaseDate": "2024-08-01",
+      "params": "104B",
+      "context": "128k",
+      "benchmarks": {
+        "bbh": 59.49,
+        "gpqa": 35.07,
+        "mathHard": 11.03,
+        "musr": 48.28,
+        "ifeval": 79.26,
+        "mmluPro": 44.21
+      }
+    },
+    {
+      "id": "google-gemma-2-27b",
+      "name": "Gemma 2 27B",
+      "architecture": "Transformer",
+      "description": "Google Gemma 2 base 27B — strong performance through knowledge distillation during training.",
+      "creator": "Google",
+      "releaseDate": "2024-06-27",
+      "params": "27B",
+      "context": "8k",
+      "benchmarks": {
+        "bbh": 56.22,
+        "gpqa": 35.07,
+        "mathHard": 14.88,
+        "musr": 43.92,
+        "ifeval": 30.1,
+        "mmluPro": 43.71
+      }
+    },
+    {
+      "id": "qwen-qwen2-5-7b-instruct",
+      "name": "Qwen2.5 7B Instruct",
+      "architecture": "Transformer",
+      "description": "Efficient 7B model from Alibaba with competitive benchmark scores for its size class.",
+      "creator": "Alibaba Cloud",
+      "releaseDate": "2024-09-18",
+      "params": "7B",
+      "context": "128k",
+      "benchmarks": {
+        "bbh": 53.69,
+        "gpqa": 29.11,
+        "mathHard": 0,
+        "musr": 40.08,
+        "ifeval": 79.62,
+        "mmluPro": 42.87
+      }
+    },
+    {
+      "id": "google-gemma-2-9b",
+      "name": "Gemma 2 9B",
+      "architecture": "Transformer",
+      "description": "Google Gemma 2 9B base model trained with distillation for improved efficiency.",
+      "creator": "Google",
+      "releaseDate": "2024-06-27",
+      "params": "9B",
+      "context": "8k",
+      "benchmarks": {
+        "bbh": 53.74,
+        "gpqa": 32.89,
+        "mathHard": 11.78,
+        "musr": 44.58,
+        "ifeval": 26.38,
+        "mmluPro": 41.03
+      }
+    },
+    {
+      "id": "tiiuae-falcon3-7b-instruct",
+      "name": "Falcon3 7B Instruct",
+      "architecture": "Transformer",
+      "description": "TII's Falcon3 7B instruction model with strong performance in the 7B size class.",
+      "creator": "TII",
+      "releaseDate": "2024-12-04",
+      "params": "7B",
+      "context": "32k",
+      "benchmarks": {
+        "bbh": 55.98,
+        "gpqa": 31.04,
+        "mathHard": 31.87,
+        "musr": 48.15,
+        "ifeval": 79.98,
+        "mmluPro": 40.87
+      }
+    },
+    {
+      "id": "microsoft-phi-3-mini-4k-instruct",
+      "name": "Phi-3 Mini 3.8B",
+      "architecture": "Transformer",
+      "description": "Microsoft's tiny but capable 3.8B instruction model designed for edge deployment.",
+      "creator": "Microsoft",
+      "releaseDate": "2024-04-23",
+      "params": "3.8B",
+      "context": "4k",
+      "benchmarks": {
+        "bbh": 54.75,
+        "gpqa": 33.22,
+        "mathHard": 14.2,
+        "musr": 42.72,
+        "ifeval": 60.55,
+        "mmluPro": 40.22
+      }
+    },
+    {
+      "id": "internlm-internlm2-5-20b-chat",
+      "name": "InternLM2.5 20B Chat",
+      "architecture": "Transformer",
+      "description": "Shanghai AI Lab's InternLM2.5 20B chat model with leading reasoning scores for its size.",
+      "creator": "InternLM",
+      "releaseDate": "2024-08-05",
+      "params": "20B",
+      "context": "32k",
+      "benchmarks": {
+        "bbh": 74.66,
+        "gpqa": 32.13,
+        "mathHard": 0,
+        "musr": 45.5,
+        "ifeval": 74.58,
+        "mmluPro": 39.98
+      }
+    },
+    {
+      "id": "01-ai-yi-1-5-9b-chat",
+      "name": "Yi-1.5 9B Chat",
+      "architecture": "Transformer",
+      "description": "01.AI's efficient 9B chat model from the Yi-1.5 series with strong Asian language support.",
+      "creator": "01.AI",
+      "releaseDate": "2024-05-13",
+      "params": "9B",
+      "context": "4k",
+      "benchmarks": {
+        "bbh": 55.29,
+        "gpqa": 33.47,
+        "mathHard": 11.63,
+        "musr": 42.46,
+        "ifeval": 65.83,
+        "mmluPro": 39.75
+      }
+    },
+    {
+      "id": "deepseek-ai-deepseek-llm-67b-chat",
+      "name": "DeepSeek LLM 67B Chat",
+      "architecture": "Transformer",
+      "description": "DeepSeek's 67B chat model trained from scratch with strong coding and reasoning capabilities.",
+      "creator": "DeepSeek",
+      "releaseDate": "2023-11-02",
+      "params": "67B",
+      "context": "4k",
+      "benchmarks": {
+        "bbh": 52.2,
+        "gpqa": 31.63,
+        "mathHard": 6.65,
+        "musr": 50.53,
+        "ifeval": 60.91,
+        "mmluPro": 39.44
+      }
+    },
+    {
+      "id": "google-gemma-2-9b-it",
+      "name": "Gemma 2 9B IT",
+      "architecture": "Transformer",
+      "description": "Google's 9B Gemma 2 instruction model, outperforming many larger models on standard benchmarks.",
+      "creator": "Google",
+      "releaseDate": "2024-06-27",
+      "params": "9B",
+      "context": "8k",
+      "benchmarks": {
+        "bbh": 59.8,
+        "gpqa": 36.07,
+        "mathHard": 0.23,
+        "musr": 40.61,
+        "ifeval": 78.66,
+        "mmluPro": 38.75
+      }
+    },
+    {
+      "id": "qwen-qwen2-7b-instruct",
+      "name": "Qwen2 7B Instruct",
+      "architecture": "Transformer",
+      "description": "Qwen2 7B instruction model — small but strong performer across diverse benchmarks.",
+      "creator": "Alibaba Cloud",
+      "releaseDate": "2024-06-06",
+      "params": "7B",
+      "context": "128k",
+      "benchmarks": {
+        "bbh": 55.08,
+        "gpqa": 29.78,
+        "mathHard": 8.61,
+        "musr": 39.15,
+        "ifeval": 61.27,
+        "mmluPro": 38.47
+      }
+    },
+    {
+      "id": "meta-llama-llama-3-1-8b-instruct",
+      "name": "Llama 3.1 8B Instruct",
+      "architecture": "Transformer",
+      "description": "Meta's efficient 8B instruction model, widely deployed for edge and consumer applications.",
+      "creator": "Meta",
+      "releaseDate": "2024-07-23",
+      "params": "8B",
+      "context": "128k",
+      "benchmarks": {
+        "bbh": 50.77,
+        "gpqa": 31.54,
+        "mathHard": 15.41,
+        "musr": 39.68,
+        "ifeval": 56.47,
+        "mmluPro": 37.98
+      }
+    },
+    {
+      "id": "internlm-internlm2-5-7b-chat",
+      "name": "InternLM2.5 7B Chat",
+      "architecture": "Transformer",
+      "description": "InternLM2.5 7B chat model from Shanghai AI Lab with strong math and coding capabilities.",
+      "creator": "InternLM",
+      "releaseDate": "2024-08-05",
+      "params": "7B",
+      "context": "8k",
+      "benchmarks": {
+        "bbh": 70.89,
+        "gpqa": 34.73,
+        "mathHard": 15.48,
+        "musr": 45.9,
+        "ifeval": 60.31,
+        "mmluPro": 37.77
+      }
+    },
+    {
+      "id": "mistralai-mixtral-8x7b-instruct-v0-1",
+      "name": "Mixtral 8×7B Instruct",
+      "architecture": "MoE",
+      "description": "Mistral's pioneering sparse MoE model — 46B total parameters, 12B active per token.",
+      "creator": "Mistral AI",
+      "releaseDate": "2024-01-08",
+      "params": "46B",
+      "context": "32k",
+      "benchmarks": {
+        "bbh": 49.35,
+        "gpqa": 30.29,
+        "mathHard": 8.16,
+        "musr": 41.93,
+        "ifeval": 61.15,
+        "mmluPro": 36.92
+      }
+    },
+    {
+      "id": "meta-llama-meta-llama-3-8b-instruct",
+      "name": "Llama 3 8B Instruct",
+      "architecture": "Transformer",
+      "description": "Meta Llama 3 8B instruction model — compact and widely adopted open-weights model.",
+      "creator": "Meta",
+      "releaseDate": "2024-04-18",
+      "params": "8B",
+      "context": "8k",
+      "benchmarks": {
+        "bbh": 48.92,
+        "gpqa": 29.28,
+        "mathHard": 8.38,
+        "musr": 37.96,
+        "ifeval": 54.8,
+        "mmluPro": 35.91
+      }
+    },
+    {
+      "id": "mistralai-mistral-nemo-instruct-2407",
+      "name": "Mistral NeMo 12B",
+      "architecture": "Transformer",
+      "description": "Mistral's 12B model built with NVIDIA, featuring 128k context and Tekken tokenizer.",
+      "creator": "Mistral AI",
+      "releaseDate": "2024-07-18",
+      "params": "12B",
+      "context": "128k",
+      "benchmarks": {
+        "bbh": 50.06,
+        "gpqa": 29.03,
+        "mathHard": 5.89,
+        "musr": 38.89,
+        "ifeval": 68.82,
+        "mmluPro": 35.17
+      }
+    },
+    {
+      "id": "meta-llama-llama-3-2-3b-instruct",
+      "name": "Llama 3.2 3B Instruct",
+      "architecture": "Transformer",
+      "description": "Meta's compact 3B model optimized for on-device deployment with multilingual support.",
+      "creator": "Meta",
+      "releaseDate": "2024-09-25",
+      "params": "3B",
+      "context": "128k",
+      "benchmarks": {
+        "bbh": 45.86,
+        "gpqa": 27.85,
+        "mathHard": 15.56,
+        "musr": 35.19,
+        "ifeval": 78.18,
+        "mmluPro": 31.95
+      }
+    },
+    {
+      "id": "nousresearch-hermes-3-llama-3-1-8b",
+      "name": "Hermes 3 Llama 3.1 8B",
+      "architecture": "Transformer",
+      "description": "Nous Research's instruction-tuned 8B model on Llama 3.1 backbone with Hermes conversational style.",
+      "creator": "Nous Research",
+      "releaseDate": "2024-08-09",
+      "params": "8B",
+      "context": "128k",
+      "benchmarks": {
+        "bbh": 51.64,
+        "gpqa": 29.78,
+        "mathHard": 4.76,
+        "musr": 43.65,
+        "ifeval": 67.03,
+        "mmluPro": 31.39
+      }
+    },
+    {
+      "id": "mistralai-mistral-7b-instruct-v0-3",
+      "name": "Mistral 7B Instruct v0.3",
+      "architecture": "Transformer",
+      "description": "Mistral's foundational 7B instruction model — a widely-used open-source baseline.",
       "creator": "Mistral AI",
       "releaseDate": "2024-05-22",
       "params": "7B",
       "context": "32k",
-      "benchmarks": { "mmlu": 62.5, "humanEval": 36.6, "gsm8k": 52.8, "math": 13.1 }
-    },
-    {
-      "id": "command-r-plus",
-      "name": "Command R+",
-      "architecture": "Transformer",
-      "description": "State-of-the-art RAG-optimized model built for enterprise workloads.",
-      "creator": "Cohere",
-      "releaseDate": "2024-04-04",
-      "params": "104B",
-      "context": "128k",
-      "benchmarks": { "mmlu": 75.2, "humanEval": 68.1, "gsm8k": 70.0, "math": 81.5 }
-    },
-    {
-      "id": "command-r",
-      "name": "Command R",
-      "architecture": "Transformer",
-      "description": "Cohere's scalable model optimized for retrieval-augmented generation and tool use.",
-      "creator": "Cohere",
-      "releaseDate": "2024-03-11",
-      "params": "35B",
-      "context": "128k",
-      "benchmarks": { "mmlu": 68.2, "humanEval": 51.7, "gsm8k": 48.8, "math": 31.2 }
-    },
-    {
-      "id": "olmo-2-7b",
-      "name": "OLMo 2 7B",
-      "architecture": "Transformer",
-      "description": "Fully open language model from AI2 with open weights, data, and training code.",
-      "creator": "AI2",
-      "releaseDate": "2024-11-01",
-      "params": "7B",
-      "context": "4k",
-      "benchmarks": { "mmlu": 67.2, "humanEval": 45.2, "gsm8k": 58.4, "math": 22.3 }
-    },
-    {
-      "id": "phi-3.5-mini",
-      "name": "Phi-3.5 Mini",
-      "architecture": "Transformer",
-      "description": "Lightweight 3.8B model with surprisingly strong reasoning and multilingual support.",
-      "creator": "Microsoft",
-      "releaseDate": "2024-08-20",
-      "params": "3.8B",
-      "context": "128k",
-      "benchmarks": { "mmlu": 69.0, "humanEval": 68.4, "gsm8k": 86.2, "math": 48.5 }
-    },
-    {
-      "id": "starcoder2-15b",
-      "name": "StarCoder2 15B",
-      "architecture": "Transformer",
-      "description": "Code-specialized model trained on 600+ programming languages via The Stack v2.",
-      "creator": "BigCode",
-      "releaseDate": "2024-02-28",
-      "params": "15B",
-      "context": "16k",
-      "benchmarks": { "mmlu": 60.1, "humanEval": 46.3, "gsm8k": 50.1, "math": 17.2 }
-    },
-    {
-      "id": "yi-34b",
-      "name": "Yi-34B",
-      "architecture": "Transformer",
-      "description": "Bilingual (English/Chinese) model with strong multilingual capabilities.",
-      "creator": "01.AI",
-      "releaseDate": "2023-11-06",
-      "params": "34B",
-      "context": "200k",
-      "benchmarks": { "mmlu": 76.3, "humanEval": 26.0, "gsm8k": 67.9, "math": null }
-    },
-    {
-      "id": "falcon-180b",
-      "name": "Falcon 180B",
-      "architecture": "Transformer",
-      "description": "TII's large open-access model trained on the RefinedWeb dataset.",
-      "creator": "TII",
-      "releaseDate": "2023-09-06",
-      "params": "180B",
-      "context": "2k",
-      "benchmarks": { "mmlu": 70.4, "humanEval": null, "gsm8k": 57.8, "math": null }
-    },
-    {
-      "id": "falcon-40b",
-      "name": "Falcon 40B",
-      "architecture": "Transformer",
-      "description": "High-quality open-access model trained on curated web data with multiquery attention.",
-      "creator": "TII",
-      "releaseDate": "2023-05-25",
-      "params": "40B",
-      "context": "2k",
-      "benchmarks": { "mmlu": 55.4, "humanEval": 13.4, "gsm8k": 25.3, "math": null }
+      "benchmarks": {
+        "bbh": 47.01,
+        "gpqa": 27.94,
+        "mathHard": 3.17,
+        "musr": 37.3,
+        "ifeval": 59.95,
+        "mmluPro": 30.75
+      }
     }
   ],
   "diffusion": [
@@ -296,7 +784,11 @@
       "creator": "Black Forest Labs",
       "releaseDate": "2024-08-01",
       "params": "12B",
-      "benchmarks": { "fid": 0.85, "clipScore": 0.32, "genSpeed": 4.2 }
+      "benchmarks": {
+        "fid": 0.85,
+        "clipScore": 0.32,
+        "genSpeed": 4.2
+      }
     },
     {
       "id": "flux-1-dev",
@@ -306,7 +798,11 @@
       "creator": "Black Forest Labs",
       "releaseDate": "2024-08-01",
       "params": "12B",
-      "benchmarks": { "fid": 0.92, "clipScore": 0.31, "genSpeed": 1.8 }
+      "benchmarks": {
+        "fid": 0.92,
+        "clipScore": 0.31,
+        "genSpeed": 1.8
+      }
     },
     {
       "id": "hidream-i1-full",
@@ -316,7 +812,11 @@
       "creator": "HiDream AI",
       "releaseDate": "2025-03-18",
       "params": "17B",
-      "benchmarks": { "fid": 0.78, "clipScore": 0.33, "genSpeed": 0.9 }
+      "benchmarks": {
+        "fid": 0.78,
+        "clipScore": 0.33,
+        "genSpeed": 0.9
+      }
     },
     {
       "id": "sd-3.5-large",
@@ -326,7 +826,11 @@
       "creator": "Stability AI",
       "releaseDate": "2024-10-22",
       "params": "8B",
-      "benchmarks": { "fid": 1.5, "clipScore": 0.31, "genSpeed": 1.2 }
+      "benchmarks": {
+        "fid": 1.5,
+        "clipScore": 0.31,
+        "genSpeed": 1.2
+      }
     },
     {
       "id": "playground-v2.5",
@@ -336,7 +840,11 @@
       "creator": "Playground AI",
       "releaseDate": "2024-02-27",
       "params": "Unknown",
-      "benchmarks": { "fid": 0.9, "clipScore": 0.30, "genSpeed": 2.1 }
+      "benchmarks": {
+        "fid": 0.9,
+        "clipScore": 0.3,
+        "genSpeed": 2.1
+      }
     },
     {
       "id": "kolors",
@@ -346,7 +854,11 @@
       "creator": "Kwai-Kolors",
       "releaseDate": "2024-07-06",
       "params": "Unknown",
-      "benchmarks": { "fid": 1.1, "clipScore": 0.30, "genSpeed": 1.6 }
+      "benchmarks": {
+        "fid": 1.1,
+        "clipScore": 0.3,
+        "genSpeed": 1.6
+      }
     },
     {
       "id": "sdxl-1.0",
@@ -356,7 +868,11 @@
       "creator": "Stability AI",
       "releaseDate": "2023-07-26",
       "params": "3.5B",
-      "benchmarks": { "fid": 1.2, "clipScore": 0.28, "genSpeed": 1.5 }
+      "benchmarks": {
+        "fid": 1.2,
+        "clipScore": 0.28,
+        "genSpeed": 1.5
+      }
     },
     {
       "id": "cogview3-plus",
@@ -366,7 +882,11 @@
       "creator": "Zhipu AI",
       "releaseDate": "2024-09-03",
       "params": "Unknown",
-      "benchmarks": { "fid": 1.6, "clipScore": 0.30, "genSpeed": 1.4 }
+      "benchmarks": {
+        "fid": 1.6,
+        "clipScore": 0.3,
+        "genSpeed": 1.4
+      }
     },
     {
       "id": "pixart-sigma",
@@ -376,7 +896,11 @@
       "creator": "PixArt-alpha",
       "releaseDate": "2024-03-20",
       "params": "0.6B",
-      "benchmarks": { "fid": 2.1, "clipScore": 0.29, "genSpeed": 2.4 }
+      "benchmarks": {
+        "fid": 2.1,
+        "clipScore": 0.29,
+        "genSpeed": 2.4
+      }
     },
     {
       "id": "pixart-alpha",
@@ -386,7 +910,11 @@
       "creator": "PixArt-alpha",
       "releaseDate": "2023-10-03",
       "params": "0.6B",
-      "benchmarks": { "fid": 2.5, "clipScore": 0.28, "genSpeed": 1.8 }
+      "benchmarks": {
+        "fid": 2.5,
+        "clipScore": 0.28,
+        "genSpeed": 1.8
+      }
     },
     {
       "id": "sd-3-medium",
@@ -396,7 +924,11 @@
       "creator": "Stability AI",
       "releaseDate": "2024-06-12",
       "params": "2B",
-      "benchmarks": { "fid": 1.8, "clipScore": 0.30, "genSpeed": 1.4 }
+      "benchmarks": {
+        "fid": 1.8,
+        "clipScore": 0.3,
+        "genSpeed": 1.4
+      }
     },
     {
       "id": "sd-2.1",
@@ -406,7 +938,11 @@
       "creator": "Stability AI",
       "releaseDate": "2022-12-07",
       "params": "0.9B",
-      "benchmarks": { "fid": 6.5, "clipScore": 0.26, "genSpeed": 3.8 }
+      "benchmarks": {
+        "fid": 6.5,
+        "clipScore": 0.26,
+        "genSpeed": 3.8
+      }
     },
     {
       "id": "sd-1.5",
@@ -416,7 +952,11 @@
       "creator": "Stability AI",
       "releaseDate": "2022-10-20",
       "params": "0.9B",
-      "benchmarks": { "fid": 9.2, "clipScore": 0.25, "genSpeed": 5.2 }
+      "benchmarks": {
+        "fid": 9.2,
+        "clipScore": 0.25,
+        "genSpeed": 5.2
+      }
     },
     {
       "id": "wuerstchen-v2",
@@ -426,7 +966,11 @@
       "creator": "Hugging Face",
       "releaseDate": "2023-09-13",
       "params": "1B",
-      "benchmarks": { "fid": 4.1, "clipScore": 0.27, "genSpeed": 3.2 }
+      "benchmarks": {
+        "fid": 4.1,
+        "clipScore": 0.27,
+        "genSpeed": 3.2
+      }
     },
     {
       "id": "instaflow-0.9b",
@@ -436,7 +980,11 @@
       "creator": "NUS / CMU",
       "releaseDate": "2023-09-11",
       "params": "0.9B",
-      "benchmarks": { "fid": 13.1, "clipScore": 0.24, "genSpeed": 8.0 }
+      "benchmarks": {
+        "fid": 13.1,
+        "clipScore": 0.24,
+        "genSpeed": 8
+      }
     },
     {
       "id": "lumina-t2x",
@@ -446,7 +994,11 @@
       "creator": "Alpha-VLLM",
       "releaseDate": "2024-04-05",
       "params": "2B",
-      "benchmarks": { "fid": 2.8, "clipScore": 0.28, "genSpeed": 1.6 }
+      "benchmarks": {
+        "fid": 2.8,
+        "clipScore": 0.28,
+        "genSpeed": 1.6
+      }
     },
     {
       "id": "omnigen-v1",
@@ -456,7 +1008,11 @@
       "creator": "PKU",
       "releaseDate": "2024-09-16",
       "params": "3.8B",
-      "benchmarks": { "fid": 2.3, "clipScore": 0.29, "genSpeed": 1.2 }
+      "benchmarks": {
+        "fid": 2.3,
+        "clipScore": 0.29,
+        "genSpeed": 1.2
+      }
     },
     {
       "id": "kandinsky-3",
@@ -466,7 +1022,11 @@
       "creator": "Sber AI",
       "releaseDate": "2023-12-06",
       "params": "Unknown",
-      "benchmarks": { "fid": 3.2, "clipScore": 0.27, "genSpeed": 1.5 }
+      "benchmarks": {
+        "fid": 3.2,
+        "clipScore": 0.27,
+        "genSpeed": 1.5
+      }
     },
     {
       "id": "dreamshaper-xl",
@@ -476,7 +1036,11 @@
       "creator": "Lykon",
       "releaseDate": "2023-10-20",
       "params": "3.5B",
-      "benchmarks": { "fid": 1.5, "clipScore": 0.29, "genSpeed": 2.0 }
+      "benchmarks": {
+        "fid": 1.5,
+        "clipScore": 0.29,
+        "genSpeed": 2
+      }
     },
     {
       "id": "realvisxl-v4",
@@ -486,7 +1050,11 @@
       "creator": "SG161222",
       "releaseDate": "2024-01-15",
       "params": "3.5B",
-      "benchmarks": { "fid": 1.3, "clipScore": 0.29, "genSpeed": 2.0 }
+      "benchmarks": {
+        "fid": 1.3,
+        "clipScore": 0.29,
+        "genSpeed": 2
+      }
     },
     {
       "id": "juggernaut-xl",
@@ -496,7 +1064,11 @@
       "creator": "RunDiffusion",
       "releaseDate": "2024-01-20",
       "params": "3.5B",
-      "benchmarks": { "fid": 1.4, "clipScore": 0.30, "genSpeed": 1.8 }
+      "benchmarks": {
+        "fid": 1.4,
+        "clipScore": 0.3,
+        "genSpeed": 1.8
+      }
     }
   ],
   "audio": [
@@ -508,7 +1080,11 @@
       "creator": "HuggingFace",
       "releaseDate": "2023-11-01",
       "params": "756M",
-      "benchmarks": { "wer": 3.0, "latency": 0.3, "multilingual": 7.0 }
+      "benchmarks": {
+        "wer": 3,
+        "latency": 0.3,
+        "multilingual": 7
+      }
     },
     {
       "id": "parakeet-tdt-1.1b",
@@ -518,7 +1094,11 @@
       "creator": "NVIDIA",
       "releaseDate": "2024-04-01",
       "params": "1.1B",
-      "benchmarks": { "wer": 1.9, "latency": 0.2, "multilingual": 1.0 }
+      "benchmarks": {
+        "wer": 1.9,
+        "latency": 0.2,
+        "multilingual": 1
+      }
     },
     {
       "id": "whisper-large-v3",
@@ -528,7 +1108,11 @@
       "creator": "OpenAI",
       "releaseDate": "2023-11-06",
       "params": "1550M",
-      "benchmarks": { "wer": 2.7, "latency": 0.8, "multilingual": 95.0 }
+      "benchmarks": {
+        "wer": 2.7,
+        "latency": 0.8,
+        "multilingual": 95
+      }
     },
     {
       "id": "whisper-large-v2",
@@ -538,7 +1122,11 @@
       "creator": "OpenAI",
       "releaseDate": "2022-12-06",
       "params": "1550M",
-      "benchmarks": { "wer": 3.0, "latency": 1.1, "multilingual": 96.0 }
+      "benchmarks": {
+        "wer": 3,
+        "latency": 1.1,
+        "multilingual": 96
+      }
     },
     {
       "id": "whisper-medium",
@@ -548,7 +1136,11 @@
       "creator": "OpenAI",
       "releaseDate": "2022-09-21",
       "params": "307M",
-      "benchmarks": { "wer": 4.2, "latency": 0.5, "multilingual": 96.0 }
+      "benchmarks": {
+        "wer": 4.2,
+        "latency": 0.5,
+        "multilingual": 96
+      }
     },
     {
       "id": "whisper-small",
@@ -558,7 +1150,11 @@
       "creator": "OpenAI",
       "releaseDate": "2022-09-21",
       "params": "244M",
-      "benchmarks": { "wer": 6.7, "latency": 0.3, "multilingual": 96.0 }
+      "benchmarks": {
+        "wer": 6.7,
+        "latency": 0.3,
+        "multilingual": 96
+      }
     },
     {
       "id": "seamless-m4t-v2",
@@ -568,7 +1164,11 @@
       "creator": "Meta",
       "releaseDate": "2023-11-30",
       "params": "2.3B",
-      "benchmarks": { "wer": 4.8, "latency": 1.2, "multilingual": 98.5 }
+      "benchmarks": {
+        "wer": 4.8,
+        "latency": 1.2,
+        "multilingual": 98.5
+      }
     },
     {
       "id": "wav2vec2-large",
@@ -578,7 +1178,11 @@
       "creator": "Meta",
       "releaseDate": "2020-09-17",
       "params": "317M",
-      "benchmarks": { "wer": 3.0, "latency": 0.5, "multilingual": 1.0 }
+      "benchmarks": {
+        "wer": 3,
+        "latency": 0.5,
+        "multilingual": 1
+      }
     },
     {
       "id": "mms",
@@ -588,7 +1192,11 @@
       "creator": "Meta",
       "releaseDate": "2023-05-22",
       "params": "1B",
-      "benchmarks": { "wer": 5.0, "latency": 0.9, "multilingual": 99.0 }
+      "benchmarks": {
+        "wer": 5,
+        "latency": 0.9,
+        "multilingual": 99
+      }
     },
     {
       "id": "hubert-large",
@@ -598,7 +1206,11 @@
       "creator": "Meta",
       "releaseDate": "2021-06-14",
       "params": "316M",
-      "benchmarks": { "wer": 3.3, "latency": 0.6, "multilingual": 1.0 }
+      "benchmarks": {
+        "wer": 3.3,
+        "latency": 0.6,
+        "multilingual": 1
+      }
     },
     {
       "id": "speecht5",
@@ -608,7 +1220,11 @@
       "creator": "Microsoft",
       "releaseDate": "2022-05-05",
       "params": "308M",
-      "benchmarks": { "wer": 6.2, "latency": 0.4, "multilingual": 2.0 }
+      "benchmarks": {
+        "wer": 6.2,
+        "latency": 0.4,
+        "multilingual": 2
+      }
     },
     {
       "id": "xtts-v2",
@@ -618,7 +1234,11 @@
       "creator": "Coqui AI",
       "releaseDate": "2023-11-24",
       "params": "467M",
-      "benchmarks": { "wer": null, "latency": 1.5, "multilingual": 17.0 }
+      "benchmarks": {
+        "wer": null,
+        "latency": 1.5,
+        "multilingual": 17
+      }
     },
     {
       "id": "musicgen-large",
@@ -628,7 +1248,11 @@
       "creator": "Meta",
       "releaseDate": "2023-06-12",
       "params": "3.3B",
-      "benchmarks": { "wer": null, "latency": 4.0, "multilingual": 1.0 }
+      "benchmarks": {
+        "wer": null,
+        "latency": 4,
+        "multilingual": 1
+      }
     },
     {
       "id": "bark",
@@ -638,7 +1262,11 @@
       "creator": "Suno AI",
       "releaseDate": "2023-04-20",
       "params": "Unknown",
-      "benchmarks": { "wer": null, "latency": 3.2, "multilingual": 8.0 }
+      "benchmarks": {
+        "wer": null,
+        "latency": 3.2,
+        "multilingual": 8
+      }
     },
     {
       "id": "stable-audio-open",
@@ -648,7 +1276,11 @@
       "creator": "Stability AI",
       "releaseDate": "2024-06-05",
       "params": "Unknown",
-      "benchmarks": { "wer": null, "latency": 2.5, "multilingual": null }
+      "benchmarks": {
+        "wer": null,
+        "latency": 2.5,
+        "multilingual": null
+      }
     },
     {
       "id": "vocos",
@@ -658,7 +1290,11 @@
       "creator": "Hubert Siuzdak",
       "releaseDate": "2023-06-05",
       "params": "13M",
-      "benchmarks": { "wer": null, "latency": 0.1, "multilingual": 1.0 }
+      "benchmarks": {
+        "wer": null,
+        "latency": 0.1,
+        "multilingual": 1
+      }
     },
     {
       "id": "whisperx",
@@ -668,7 +1304,11 @@
       "creator": "m-bain",
       "releaseDate": "2023-04-03",
       "params": "1550M",
-      "benchmarks": { "wer": 2.5, "latency": 0.4, "multilingual": 96.0 }
+      "benchmarks": {
+        "wer": 2.5,
+        "latency": 0.4,
+        "multilingual": 96
+      }
     },
     {
       "id": "nemo-fastconformer",
@@ -678,7 +1318,11 @@
       "creator": "NVIDIA",
       "releaseDate": "2023-09-01",
       "params": "115M",
-      "benchmarks": { "wer": 2.1, "latency": 0.3, "multilingual": 14.0 }
+      "benchmarks": {
+        "wer": 2.1,
+        "latency": 0.3,
+        "multilingual": 14
+      }
     },
     {
       "id": "moonshine-base",
@@ -688,7 +1332,11 @@
       "creator": "Useful Sensors",
       "releaseDate": "2024-10-17",
       "params": "61M",
-      "benchmarks": { "wer": 2.8, "latency": 0.2, "multilingual": 1.0 }
+      "benchmarks": {
+        "wer": 2.8,
+        "latency": 0.2,
+        "multilingual": 1
+      }
     },
     {
       "id": "encodec",
@@ -698,7 +1346,11 @@
       "creator": "Meta",
       "releaseDate": "2022-10-24",
       "params": "Unknown",
-      "benchmarks": { "wer": null, "latency": 0.2, "multilingual": 1.0 }
+      "benchmarks": {
+        "wer": null,
+        "latency": 0.2,
+        "multilingual": 1
+      }
     }
   ]
 }
