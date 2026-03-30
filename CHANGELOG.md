@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2026-03-31
+
+### Added
+- **Timeline page:** New `/timeline` route with horizontal snap-scroll through the full release history of all 84 models across LLM, Diffusion, and Audio categories.
+- **Month-column layout:** Each release month is a snap-aligned column with year markers and month tick labels. Empty months render as narrow spacers. Month range spans 2020–2025 and is always stable regardless of active filters.
+- **Category filter toggles:** Header chips toggle LLM (Cyber Lime), Diffusion (Electric Amber), and Audio (teal) categories. Columns never reflow when filtering — only card visibility changes.
+- **Scroll progress bar:** 2px primary-colored bar in the header tracks horizontal scroll position across the full timeline.
+- **Timeline nav item:** Sidebar now includes a `TIMELINE` entry with the Clock icon.
+
+## [0.9.0] - 2026-03-31
+
+### Added
+- **HuggingFace source links:** All 83 models across LLM, Diffusion, and Audio categories now have a `huggingFaceId` field (e.g. `meta-llama/Llama-3.3-70B-Instruct`) in `data/models.json` linking to their HuggingFace model page.
+- **HF links on model cards:** Each model card on the LLM, Diffusion, and Audio listing pages shows a small "HF" button with an external link icon that opens the model's HuggingFace page in a new tab.
+- **HF link on model detail page:** The model detail page header now shows a "HuggingFace" button alongside the architecture badge for direct access to model weights and files.
+- **Script updates:** `fetch-hf-leaderboard.ts` now includes `huggingFaceId` in the `ModelEntry` interface and populates it automatically from the org/model pair. `merge-hf-models.ts` passes `huggingFaceId` through to the output.
+
+### Changed
+- Model listing cards restructured to use the stretched-link pattern (absolute positioned Link + `pointer-events` layering) to support both card-level navigation and the HF external link without invalid nested `<a>` elements.
+
 ## [0.8.0] - 2026-03-29
 
 ### Added
