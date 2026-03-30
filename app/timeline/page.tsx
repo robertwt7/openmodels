@@ -196,12 +196,59 @@ export default function TimelinePage() {
   );
 }
 
-function TimelineRuler(_props: {
+const WIDE_COL = 280;  // px — months with visible models
+const NARROW_COL = 80; // px — empty/fully-filtered months
+
+function colWidth(monthKey: string, byMonth: Map<string, TimelineModel[]>, active: Record<Category, boolean>): number {
+  const models = byMonth.get(monthKey) ?? [];
+  const hasVisible = models.some((m) => active[m.category]);
+  return hasVisible ? WIDE_COL : NARROW_COL;
+}
+
+function TimelineRuler({
+  monthRange,
+  byMonth,
+  active,
+}: {
   monthRange: string[];
   byMonth: Map<string, TimelineModel[]>;
   active: Record<Category, boolean>;
 }) {
-  return <div className="h-20 bg-surface-lowest border-b border-outline-variant/20 flex items-end" />;
+  return (
+    <div className="shrink-0 h-20 bg-surface-lowest border-b border-outline-variant/20 flex items-end select-none">
+      {monthRange.map((ym) => {
+        const [yearStr, monthStr] = ym.split("-");
+        const monthIdx = Number(monthStr) - 1;
+        const isJanuary = monthIdx === 0;
+        const width = colWidth(ym, byMonth, active);
+
+        return (
+          <div
+            key={ym}
+            className="shrink-0 flex flex-col justify-end pb-2 px-2 relative"
+            style={{ width, scrollSnapAlign: "start" }}
+          >
+            {/* Year label — shown once per year in January */}
+            {isJanuary && (
+              <span className="absolute top-2 left-2 font-mono text-primary text-lg font-bold leading-none">
+                {yearStr}
+              </span>
+            )}
+            {/* Vertical year divider */}
+            {isJanuary && (
+              <div className="absolute left-0 top-0 bottom-0 w-px bg-outline-variant/40" />
+            )}
+            {/* Month label */}
+            <span className="font-mono text-[10px] uppercase tracking-wider text-gray-600">
+              {MONTH_NAMES[monthIdx]}
+            </span>
+            {/* Baseline tick */}
+            <div className="absolute bottom-0 left-2 right-2 h-px bg-outline-variant/30" />
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
 function CardsArea(_props: {
