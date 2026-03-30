@@ -163,6 +163,7 @@ interface LLMBenchmarks {
 
 interface ModelEntry {
   id: string;
+  huggingFaceId: string;
   name: string;
   architecture: string;
   description: string;
@@ -407,6 +408,7 @@ async function processModel(
 
   return {
     id: slugify(org, model),
+    huggingFaceId: `${org}/${model}`,
     name: prettyName(model),
     architecture,
     description,

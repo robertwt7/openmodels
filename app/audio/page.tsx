@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Zap, Activity } from "lucide-react";
+import { Zap, Activity, ExternalLink } from "lucide-react";
 import modelsData from "@/data/models.json";
 
 export default function AudioPage() {
@@ -48,15 +48,29 @@ export default function AudioPage() {
 
 function AudioModelCard({ model }: { model: (typeof modelsData.audio)[number] }) {
   return (
-    <Link href={`/models/audio/${model.id}`} className="bg-surface-low hover:bg-surface-high transition-colors p-6 flex flex-col lg:flex-row gap-6 lg:items-center justify-between group relative overflow-hidden border border-outline-variant/10 no-underline">
-      <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-outline-variant/40"></div>
+    <div className="bg-surface-low hover:bg-surface-high transition-colors p-6 flex flex-col lg:flex-row gap-6 lg:items-center justify-between group relative overflow-hidden border border-outline-variant/10">
+      {/* Stretched link covering the whole card */}
+      <Link href={`/models/audio/${model.id}`} className="absolute inset-0 z-0" aria-label={`View ${model.name}`} />
 
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center gap-3">
+      <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-outline-variant/40 pointer-events-none"></div>
+
+      <div className="flex flex-col gap-2 relative z-10 pointer-events-none">
+        <div className="flex items-center gap-3 flex-wrap">
           <h3 className="font-display text-xl font-bold text-white group-hover:text-primary transition-colors">{model.name}</h3>
           <div className="text-xs font-mono border border-outline-variant/20 px-2 py-0.5 text-gray-400">
             {model.architecture}
           </div>
+          {"huggingFaceId" in model && model.huggingFaceId && (
+            <a
+              href={`https://huggingface.co/${model.huggingFaceId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="pointer-events-auto flex items-center gap-1 text-[10px] font-mono border border-outline-variant/20 px-2 py-0.5 text-gray-400 hover:text-primary hover:border-primary/40 transition-colors"
+            >
+              <ExternalLink className="w-2.5 h-2.5" />
+              HF
+            </a>
+          )}
         </div>
         <p className="text-sm text-gray-400 max-w-xl">{model.description}</p>
         <div className="flex gap-4 mt-2">
@@ -71,7 +85,7 @@ function AudioModelCard({ model }: { model: (typeof modelsData.audio)[number] })
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-4 lg:items-center shrink-0">
+      <div className="flex flex-col sm:flex-row gap-4 lg:items-center shrink-0 relative z-10 pointer-events-none">
         <div className="bg-surface-highest p-4 rounded-sm flex gap-6 border border-outline-variant/10 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)]">
           <div className="flex flex-col gap-1">
             <span className="text-[10px] text-gray-500 font-mono uppercase">Params</span>
@@ -95,6 +109,6 @@ function AudioModelCard({ model }: { model: (typeof modelsData.audio)[number] })
           View &rarr;
         </span>
       </div>
-    </Link>
+    </div>
   );
 }

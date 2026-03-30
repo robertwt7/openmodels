@@ -2,7 +2,7 @@
 
 import { use } from "react";
 import Link from "next/link";
-import { ArrowLeft, Zap, Activity, Calendar, Cpu, Hash } from "lucide-react";
+import { ArrowLeft, Zap, Activity, Calendar, Cpu, Hash, ExternalLink } from "lucide-react";
 import {
   RadarChart,
   PolarGrid,
@@ -217,6 +217,17 @@ export default function ModelDetailPage({
           <span className="text-xs font-mono border border-outline-variant/20 px-3 py-1 text-gray-400">
             {model.architecture}
           </span>
+          {model.huggingFaceId && (
+            <a
+              href={`https://huggingface.co/${model.huggingFaceId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-xs font-mono border border-primary/30 px-3 py-1 text-primary hover:bg-primary/10 transition-colors"
+            >
+              <ExternalLink className="w-3 h-3" />
+              HuggingFace
+            </a>
+          )}
         </div>
         <p className="text-gray-400 font-body max-w-2xl text-lg">
           {model.description}

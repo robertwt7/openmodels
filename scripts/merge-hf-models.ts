@@ -432,6 +432,7 @@ const OVERRIDES: Record<string, Partial<{
 
 interface FetchedModel {
   id: string;
+  huggingFaceId: string;
   name: string;
   architecture: string;
   description: string;
