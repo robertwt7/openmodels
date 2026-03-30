@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import Link from "next/link";
 import modelsData from "@/data/models.json";
 import { Category } from "@/lib/benchmarks";
 
@@ -105,8 +104,110 @@ function groupByMonth(models: TimelineModel[]): Map<string, TimelineModel[]> {
 
 const MONTH_NAMES = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
 
-// ─── Placeholder export (will be replaced in Task 3) ─────────────────────────
+// ─── Category config ──────────────────────────────────────────────────────────
+
+const CATEGORY_CONFIG: Record<Category, { label: string; color: string; borderColor: string }> = {
+  llm:      { label: "LLM",      color: "text-primary",            borderColor: "border-primary/50" },
+  diffusion:{ label: "Diffusion",color: "text-secondary-container", borderColor: "border-secondary-container/50" },
+  audio:    { label: "Audio",    color: "text-[#00BFFF]",          borderColor: "border-[#00BFFF]/50" },
+};
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function TimelinePage() {
-  return <div className="font-mono text-primary p-8">TIMELINE // WIP</div>;
+  const allModels = normaliseModels();
+  const monthRange = computeMonthRange(allModels);
+  const byMonth = groupByMonth(allModels);
+
+  const [active, setActive] = useState<Record<Category, boolean>>({
+    llm: true, diffusion: true, audio: true,
+  });
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const handleScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const max = el.scrollWidth - el.clientWidth;
+    setScrollProgress(max > 0 ? el.scrollLeft / max : 0);
+  }, []);
+
+  const toggleCategory = (cat: Category) => {
+    setActive((prev) => ({ ...prev, [cat]: !prev[cat] }));
+  };
+
+  return (
+    <div className="flex flex-col h-screen overflow-hidden -m-8 lg:-m-12 xl:-m-16">
+      {/* ── Header ── */}
+      <header className="shrink-0 px-8 py-4 bg-surface-lowest border-b border-outline-variant/20 flex flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <span className="w-2 h-2 bg-primary animate-blink shrink-0" />
+            <h1 className="font-display text-2xl font-bold uppercase tracking-tight text-white">
+              Chronological Index
+              <span className="text-primary animate-blink ml-1">_</span>
+            </h1>
+          </div>
+          {/* Category filter chips */}
+          <div className="flex gap-2">
+            {(Object.keys(CATEGORY_CONFIG) as Category[]).map((cat) => {
+              const cfg = CATEGORY_CONFIG[cat];
+              const isOn = active[cat];
+              return (
+                <button
+                  key={cat}
+                  onClick={() => toggleCategory(cat)}
+                  className={`font-mono text-xs uppercase tracking-wider px-3 py-1.5 border transition-all relative overflow-hidden ${
+                    isOn
+                      ? `${cfg.borderColor} ${cfg.color} bg-surface-low`
+                      : "border-outline-variant/20 text-gray-600 bg-surface-lowest"
+                  }`}
+                >
+                  {isOn && <span className={`absolute left-0 top-0 bottom-0 w-0.5 ${cfg.color.replace("text-","bg-")}`} />}
+                  {cfg.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+        {/* Progress bar */}
+        <div className="h-[2px] bg-outline-variant/20 w-full rounded-none overflow-hidden">
+          <div
+            className="h-full bg-primary transition-all duration-75"
+            style={{ width: `${scrollProgress * 100}%` }}
+          />
+        </div>
+      </header>
+
+      {/* ── Scrollable timeline (ruler + cards) ── */}
+      <div
+        ref={scrollRef}
+        onScroll={handleScroll}
+        className="flex-1 overflow-x-auto overflow-y-hidden"
+        style={{ scrollSnapType: "x mandatory", overscrollBehaviorX: "contain" }}
+      >
+        {/* Ruler + cards share one wide flex row */}
+        <div className="flex flex-col h-full" style={{ width: "max-content" }}>
+          <TimelineRuler monthRange={monthRange} byMonth={byMonth} active={active} />
+          <CardsArea monthRange={monthRange} byMonth={byMonth} active={active} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TimelineRuler(_props: {
+  monthRange: string[];
+  byMonth: Map<string, TimelineModel[]>;
+  active: Record<Category, boolean>;
+}) {
+  return <div className="h-20 bg-surface-lowest border-b border-outline-variant/20 flex items-end" />;
+}
+
+function CardsArea(_props: {
+  monthRange: string[];
+  byMonth: Map<string, TimelineModel[]>;
+  active: Record<Category, boolean>;
+}) {
+  return <div className="flex-1 flex" />;
 }
