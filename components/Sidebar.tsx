@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Database, Image as ImageIcon, Mic, Trophy, BarChart2 } from "lucide-react";
+import { Database, Image as ImageIcon, Mic, Trophy, BarChart2, Clock } from "lucide-react";
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -13,6 +13,7 @@ export default function Sidebar() {
     { name: "Audio", href: "/audio", icon: Mic },
     { name: "Leaderboard", href: "/leaderboard", icon: Trophy },
     { name: "Compare", href: "/compare", icon: BarChart2 },
+    { name: "Timeline", href: "/timeline", icon: Clock },
   ];
 
   return (
