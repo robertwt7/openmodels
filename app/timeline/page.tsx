@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
+import Link from "next/link";
 import modelsData from "@/data/models.json";
 import { Category } from "@/lib/benchmarks";
 
@@ -251,10 +252,91 @@ function TimelineRuler({
   );
 }
 
-function CardsArea(_props: {
+function CardsArea({
+  monthRange,
+  byMonth,
+  active,
+}: {
   monthRange: string[];
   byMonth: Map<string, TimelineModel[]>;
   active: Record<Category, boolean>;
 }) {
-  return <div className="flex-1 flex" />;
+  return (
+    <div className="flex-1 flex overflow-y-auto">
+      {monthRange.map((ym) => {
+        const models = byMonth.get(ym) ?? [];
+        const visibleModels = models.filter((m) => active[m.category]);
+        const width = colWidth(ym, byMonth, active);
+        const isEmpty = visibleModels.length === 0;
+
+        return (
+          <div
+            key={ym}
+            className="shrink-0 flex flex-col gap-3 p-3 relative"
+            style={{ width, scrollSnapAlign: "start" }}
+          >
+            {isEmpty ? (
+              /* Empty month — dashed center line */
+              <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-px border-l border-dashed border-outline-variant/20" />
+            ) : (
+              <>
+                {/* Model count badge */}
+                <div className="font-mono text-[9px] uppercase tracking-widest text-gray-600 px-1">
+                  {visibleModels.length} MODEL{visibleModels.length !== 1 ? "S" : ""}
+                </div>
+                {visibleModels.map((model) => (
+                  <TimelineModelCard key={model.id} model={model} />
+                ))}
+              </>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function TimelineModelCard({ model }: { model: TimelineModel }) {
+  const cfg = CATEGORY_CONFIG[model.category];
+
+  return (
+    <Link
+      href={model.href}
+      className="block bg-surface-low hover:bg-surface-high border border-outline-variant/10 hover:border-outline-variant/30 p-3 relative overflow-hidden transition-colors no-underline group"
+    >
+      {/* Corner decoration */}
+      <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-outline-variant/40" />
+
+      {/* Category badge */}
+      <div className={`inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-widest mb-2 ${cfg.color}`}>
+        <span className={`w-1.5 h-1.5 shrink-0 ${cfg.color.replace("text-","bg-")}`} />
+        {cfg.label}
+      </div>
+
+      {/* Model name */}
+      <div className="font-display font-bold text-sm text-white group-hover:text-primary transition-colors leading-tight mb-1">
+        {model.name}
+      </div>
+
+      {/* Creator */}
+      <div className="font-mono text-[10px] text-gray-500 mb-3">{model.creator}</div>
+
+      {/* Stats row */}
+      <div className="bg-surface-highest border border-outline-variant/10 p-2 flex gap-4">
+        <div className="flex flex-col gap-0.5">
+          <span className="font-mono text-[9px] uppercase text-gray-600">Params</span>
+          <span className="font-mono text-xs text-gray-300">{model.params}</span>
+        </div>
+        <div className="flex flex-col gap-0.5">
+          <span className="font-mono text-[9px] uppercase text-gray-600">{model.benchmarkLabel}</span>
+          <span className="font-mono text-xs text-primary">{model.benchmarkValue}</span>
+        </div>
+      </div>
+
+      {/* View link */}
+      <div className="mt-2 font-mono text-[10px] text-gray-600 group-hover:text-primary transition-colors text-right">
+        View →
+      </div>
+    </Link>
+  );
 }
