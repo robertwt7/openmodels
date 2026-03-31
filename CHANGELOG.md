@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-03-31
+
+### Added
+- **React Query integration:** Added `@tanstack/react-query` v5. A `QueryProvider` component wraps the app in `app/layout.tsx` with a stable `QueryClient` (5-minute stale time, 2 retries).
+- **Live Leaderboard feed on LLM index:** The homepage (`/`) now shows a second "Live Feed" section below the curated models. It fetches live data from the HuggingFace `open-llm-leaderboard/contents` dataset via React Query.
+- **API proxy route:** New `app/api/hf-leaderboard/route.ts` proxies the HuggingFace Datasets Server API (`datasets-server.huggingface.co`) to avoid CORS issues and adds 5-minute server-side caching.
+- **HF API types & mapping:** `lib/hf-api.ts` defines `HFLeaderboardRow`, `HFLeaderboardResponse`, and `LiveModel` types, plus a `mapHFRowToModel` utility that maps raw HF column names to the app's internal schema.
+- **`useLeaderboard` hook:** `lib/hooks/useLeaderboard.ts` exposes a typed React Query hook with offset/length pagination and `keepPreviousData` for smooth page transitions.
+- **`LiveModelCard` component:** Displays live-fetched models with params, average score, MMLU-Pro, BBH, GPQA metrics, MoE badge, type badge, and HF link. Distinct from curated `ModelCard` (no context window or description, as those are unavailable from the dataset API).
+- **Skeleton loading state:** 5 animated placeholder cards shown while the initial live feed loads.
+- **Pagination:** Prev/Next controls navigate through the full leaderboard dataset (50 models per page), with total model count shown in the section header.
+
 ## [1.0.0] - 2026-03-31
 
 ### Added
