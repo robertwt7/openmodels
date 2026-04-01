@@ -2,13 +2,13 @@
 // Dataset: open-llm-leaderboard/contents
 
 export interface HFLeaderboardRow {
-  model: string;
-  average: number | null;
+  fullname: string;
+  "Average ⬆️": number | null;
   IFEval: number | null;
   BBH: number | null;
   "MATH Lvl 5": number | null;
   GPQA: number | null;
-  MuSR: number | null;
+  MUSR: number | null;
   "MMLU-PRO": number | null;
   Architecture: string | null;
   "#Params (B)": number | null;
@@ -92,11 +92,11 @@ function round2(v: number | null): number | null {
 
 export function mapHFRowToModel(row: HFLeaderboardRow): LiveModel {
   return {
-    id: slugify(row.model),
-    huggingFaceId: row.model,
-    name: prettyName(row.model),
+    id: slugify(row.fullname),
+    huggingFaceId: row.fullname,
+    name: prettyName(row.fullname),
     architecture: row.Architecture ?? "Transformer",
-    creator: creatorFromId(row.model),
+    creator: creatorFromId(row.fullname),
     params: formatParams(row["#Params (B)"]),
     isMoE: row.MoE ?? false,
     type: row.Type ?? "",
@@ -105,10 +105,10 @@ export function mapHFRowToModel(row: HFLeaderboardRow): LiveModel {
       bbh: round2(row.BBH),
       gpqa: round2(row.GPQA),
       mathHard: round2(row["MATH Lvl 5"]),
-      musr: round2(row.MuSR),
+      musr: round2(row.MUSR),
       ifeval: round2(row.IFEval),
       mmluPro: round2(row["MMLU-PRO"]),
-      average: round2(row.average),
+      average: round2(row["Average ⬆️"]),
     },
   };
 }
