@@ -30,7 +30,6 @@ function toYearMonth(dateStr: string): string {
 }
 
 function buildMonthRange(start: string, end: string): string[] {
-  // start and end are "YYYY-MM"
   const months: string[] = [];
   let [y, m] = start.split("-").map(Number);
   const [ey, em] = end.split("-").map(Number);
@@ -87,7 +86,6 @@ function normaliseModels(): TimelineModel[] {
 function computeMonthRange(all: TimelineModel[]): string[] {
   const dates = all.map((m) => toYearMonth(m.releaseDate)).sort();
   if (dates.length === 0) return [];
-  // Pad to full year boundaries
   const startYear = dates[0].slice(0, 4);
   const endYear = dates[dates.length - 1].slice(0, 4);
   return buildMonthRange(`${startYear}-01`, `${endYear}-12`);
@@ -101,6 +99,16 @@ function groupByMonth(models: TimelineModel[]): Map<string, TimelineModel[]> {
     map.get(key)!.push(m);
   }
   return map;
+}
+
+function groupByYear(months: string[]): Record<string, string[]> {
+  const result: Record<string, string[]> = {};
+  for (const ym of months) {
+    const year = ym.slice(0, 4);
+    if (!result[year]) result[year] = [];
+    result[year].push(ym);
+  }
+  return result;
 }
 
 const MONTH_NAMES = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
@@ -129,8 +137,8 @@ export default function TimelinePage() {
   const handleScroll = useCallback(() => {
     const el = scrollRef.current;
     if (!el) return;
-    const max = el.scrollWidth - el.clientWidth;
-    setScrollProgress(max > 0 ? el.scrollLeft / max : 0);
+    const max = el.scrollHeight - el.clientHeight;
+    setScrollProgress(max > 0 ? el.scrollTop / max : 0);
   }, []);
 
   const toggleCategory = (cat: Category) => {
@@ -171,8 +179,8 @@ export default function TimelinePage() {
             })}
           </div>
         </div>
-        {/* Progress bar */}
-        <div className="h-[2px] bg-outline-variant/20 w-full rounded-none overflow-hidden">
+        {/* Scroll progress bar */}
+        <div className="h-[2px] bg-outline-variant/20 w-full overflow-hidden">
           <div
             className="h-full bg-primary transition-all duration-75"
             style={{ width: `${scrollProgress * 100}%` }}
@@ -180,33 +188,21 @@ export default function TimelinePage() {
         </div>
       </header>
 
-      {/* ── Scrollable timeline (ruler + cards) ── */}
+      {/* ── Vertical scrollable timeline ── */}
       <div
         ref={scrollRef}
         onScroll={handleScroll}
-        className="flex-1 overflow-x-auto overflow-y-hidden"
-        style={{ scrollSnapType: "x mandatory", overscrollBehaviorX: "contain" }}
+        className="flex-1 overflow-y-auto overflow-x-hidden"
       >
-        {/* Ruler + cards share one wide flex row */}
-        <div className="flex flex-col h-full" style={{ width: "max-content" }}>
-          <TimelineRuler monthRange={monthRange} byMonth={byMonth} active={active} />
-          <CardsArea monthRange={monthRange} byMonth={byMonth} active={active} />
-        </div>
+        <VerticalTimeline monthRange={monthRange} byMonth={byMonth} active={active} />
       </div>
     </div>
   );
 }
 
-const WIDE_COL = 280;  // px — months with visible models
-const NARROW_COL = 80; // px — empty/fully-filtered months
+// ─── Vertical Timeline ────────────────────────────────────────────────────────
 
-function colWidth(monthKey: string, byMonth: Map<string, TimelineModel[]>, active: Record<Category, boolean>): number {
-  const models = byMonth.get(monthKey) ?? [];
-  const hasVisible = models.some((m) => active[m.category]);
-  return hasVisible ? WIDE_COL : NARROW_COL;
-}
-
-function TimelineRuler({
+function VerticalTimeline({
   monthRange,
   byMonth,
   active,
@@ -215,36 +211,67 @@ function TimelineRuler({
   byMonth: Map<string, TimelineModel[]>;
   active: Record<Category, boolean>;
 }) {
+  const years = groupByYear(monthRange);
+
   return (
-    <div className="shrink-0 h-20 bg-surface-lowest border-b border-outline-variant/20 flex items-end select-none">
-      {monthRange.map((ym) => {
-        const [yearStr, monthStr] = ym.split("-");
-        const monthIdx = Number(monthStr) - 1;
-        const isJanuary = monthIdx === 0;
-        const width = colWidth(ym, byMonth, active);
+    <div className="px-8 py-8 flex flex-col gap-12">
+      {Object.entries(years).map(([year, months]) => (
+        <YearSection
+          key={year}
+          year={year}
+          months={months}
+          byMonth={byMonth}
+          active={active}
+        />
+      ))}
+    </div>
+  );
+}
+
+function YearSection({
+  year,
+  months,
+  byMonth,
+  active,
+}: {
+  year: string;
+  months: string[];
+  byMonth: Map<string, TimelineModel[]>;
+  active: Record<Category, boolean>;
+}) {
+  const hasAnyVisible = months.some(
+    (ym) => (byMonth.get(ym) ?? []).some((m) => active[m.category])
+  );
+  if (!hasAnyVisible) return null;
+
+  return (
+    <div className="flex flex-col gap-6">
+      {/* Year banner */}
+      <div className="flex items-center gap-4">
+        <span className="font-mono text-primary text-3xl font-bold leading-none">{year}</span>
+        <div className="flex-1 h-px bg-outline-variant/30" />
+      </div>
+
+      {/* Month rows */}
+      {months.map((ym) => {
+        const visibleModels = (byMonth.get(ym) ?? []).filter((m) => active[m.category]);
+        if (visibleModels.length === 0) return null;
+        const monthIdx = Number(ym.split("-")[1]) - 1;
 
         return (
-          <div
-            key={ym}
-            className="shrink-0 flex flex-col justify-end pb-2 px-2 relative"
-            style={{ width, scrollSnapAlign: "start" }}
-          >
-            {/* Year label — shown once per year in January */}
-            {isJanuary && (
-              <span className="absolute top-2 left-2 font-mono text-primary text-lg font-bold leading-none">
-                {yearStr}
-              </span>
-            )}
-            {/* Vertical year divider */}
-            {isJanuary && (
-              <div className="absolute left-0 top-0 bottom-0 w-px bg-outline-variant/40" />
-            )}
+          <div key={ym} className="flex gap-6">
             {/* Month label */}
-            <span className="font-mono text-[10px] uppercase tracking-wider text-gray-600">
-              {MONTH_NAMES[monthIdx]}
-            </span>
-            {/* Baseline tick */}
-            <div className="absolute bottom-0 left-2 right-2 h-px bg-outline-variant/30" />
+            <div className="w-12 shrink-0 pt-1">
+              <span className="font-mono text-[11px] uppercase tracking-wider text-gray-500">
+                {MONTH_NAMES[monthIdx]}
+              </span>
+            </div>
+            {/* Cards */}
+            <div className="flex flex-wrap gap-3">
+              {visibleModels.map((model) => (
+                <TimelineModelCard key={model.id} model={model} />
+              ))}
+            </div>
           </div>
         );
       })}
@@ -252,49 +279,7 @@ function TimelineRuler({
   );
 }
 
-function CardsArea({
-  monthRange,
-  byMonth,
-  active,
-}: {
-  monthRange: string[];
-  byMonth: Map<string, TimelineModel[]>;
-  active: Record<Category, boolean>;
-}) {
-  return (
-    <div className="flex-1 flex overflow-y-auto">
-      {monthRange.map((ym) => {
-        const models = byMonth.get(ym) ?? [];
-        const visibleModels = models.filter((m) => active[m.category]);
-        const width = colWidth(ym, byMonth, active);
-        const isEmpty = visibleModels.length === 0;
-
-        return (
-          <div
-            key={ym}
-            className="shrink-0 flex flex-col gap-3 p-3 relative"
-            style={{ width, scrollSnapAlign: "start" }}
-          >
-            {isEmpty ? (
-              /* Empty month — dashed center line */
-              <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-px border-l border-dashed border-outline-variant/20" />
-            ) : (
-              <>
-                {/* Model count badge */}
-                <div className="font-mono text-[9px] uppercase tracking-widest text-gray-600 px-1">
-                  {visibleModels.length} MODEL{visibleModels.length !== 1 ? "S" : ""}
-                </div>
-                {visibleModels.map((model) => (
-                  <TimelineModelCard key={model.id} model={model} />
-                ))}
-              </>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
+// ─── Model Card ───────────────────────────────────────────────────────────────
 
 function TimelineModelCard({ model }: { model: TimelineModel }) {
   const cfg = CATEGORY_CONFIG[model.category];
@@ -302,7 +287,7 @@ function TimelineModelCard({ model }: { model: TimelineModel }) {
   return (
     <Link
       href={model.href}
-      className="block bg-surface-low hover:bg-surface-high border border-outline-variant/10 hover:border-outline-variant/30 p-3 relative overflow-hidden transition-colors no-underline group"
+      className="w-[220px] block bg-surface-low hover:bg-surface-high border border-outline-variant/10 hover:border-outline-variant/30 p-3 relative overflow-hidden transition-colors no-underline group"
     >
       {/* Corner decoration */}
       <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-outline-variant/40" />
