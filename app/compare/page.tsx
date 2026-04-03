@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   BarChart,
   Bar,
@@ -19,6 +19,8 @@ import {
 import modelsData from "@/data/models.json";
 import { BenchmarkTooltip } from "@/components/BenchmarkTooltip";
 import { benchmarkMeta } from "@/lib/benchmarks";
+import { useLeaderboardFull } from "@/lib/hooks/useLeaderboardFull";
+import type { LiveModel } from "@/lib/hf-api";
 
 const NODE_LABELS = ["Alpha", "Beta", "Gamma", "Delta", "Epsilon"];
 const colors = ["#DFFF00", "#FFBF00", "#60a5fa", "#f472b6", "#a78bfa"];
@@ -42,42 +44,65 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-export default function ComparePage() {
-  const [activeCategory, setActiveCategory] = useState<keyof typeof modelsData>("llm");
-  const [selectedModelIds, setSelectedModelIds] = useState<string[]>([
-    modelsData.llm[0].id,
-    modelsData.llm[1].id,
-  ]);
+type ActiveCategory = "llm" | "diffusion" | "audio";
 
-  const handleCategoryChange = (newCategory: keyof typeof modelsData) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const categoryModels = (modelsData as any)[newCategory] as Array<{ id: string }>;
+export default function ComparePage() {
+  const [activeCategory, setActiveCategory] = useState<ActiveCategory>("llm");
+  const [selectedModelIds, setSelectedModelIds] = useState<string[]>([]);
+  const [searchQueries, setSearchQueries] = useState<string[]>(["", ""]);
+  const [openDropdown, setOpenDropdown] = useState<number | null>(null);
+
+  const { data: liveData, isLoading: liveLoading } = useLeaderboardFull();
+  const llmModels: LiveModel[] = liveData?.models ?? [];
+
+  // Static models for diffusion/audio
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const staticModels = activeCategory !== "llm" ? ((modelsData as any)[activeCategory] as any[]) : [];
+  const models = activeCategory === "llm" ? llmModels : staticModels;
+
+  // Initialize selectedModelIds when category changes or data loads
+  useEffect(() => {
+    if (activeCategory === "llm") {
+      if (llmModels.length > 0 && selectedModelIds.length === 0) {
+        setSelectedModelIds([llmModels[0].id, llmModels[1]?.id ?? llmModels[0].id]);
+        setSearchQueries(["", ""]);
+      }
+    } else {
+      if (staticModels.length > 0) {
+        setSelectedModelIds([staticModels[0].id, staticModels[1]?.id ?? staticModels[0].id]);
+        setSearchQueries(["", ""]);
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeCategory, llmModels.length]);
+
+  const handleCategoryChange = (newCategory: ActiveCategory) => {
     setActiveCategory(newCategory);
-    setSelectedModelIds([
-      categoryModels[0].id,
-      categoryModels[1]?.id ?? categoryModels[0].id,
-    ]);
+    setSelectedModelIds([]);
+    setSearchQueries(["", ""]);
+    setOpenDropdown(null);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const models = (modelsData as any)[activeCategory] as any[];
-  const selectedModels = selectedModelIds
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .map((id) => models.find((m: any) => m.id === id))
-    .filter((m): m is NonNullable<typeof m> => m != null);
+  const selectedModels = selectedModelIds.map((id) => (models as any[]).find((m: any) => m.id === id)).filter(Boolean);
 
   const benchmarkKeys = selectedModels.length > 0 ? Object.keys(selectedModels[0].benchmarks) : [];
 
   const addNode = () => {
     if (selectedModelIds.length >= 5) return;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const next = models.find((m: any) => !selectedModelIds.includes(m.id));
-    if (next) setSelectedModelIds([...selectedModelIds, next.id]);
+    const next = (models as any[]).find((m: any) => !selectedModelIds.includes(m.id));
+    if (next) {
+      setSelectedModelIds([...selectedModelIds, next.id]);
+      setSearchQueries([...searchQueries, ""]);
+    }
   };
 
   const removeNode = (index: number) => {
     if (selectedModelIds.length <= 1) return;
     setSelectedModelIds(selectedModelIds.filter((_, i) => i !== index));
+    setSearchQueries(searchQueries.filter((_, i) => i !== index));
+    if (openDropdown === index) setOpenDropdown(null);
   };
 
   const updateNode = (index: number, modelId: string) => {
@@ -85,7 +110,20 @@ export default function ComparePage() {
     const updated = [...selectedModelIds];
     updated[index] = modelId;
     setSelectedModelIds(updated);
+    // Clear search and close dropdown
+    const updatedQueries = [...searchQueries];
+    updatedQueries[index] = "";
+    setSearchQueries(updatedQueries);
+    setOpenDropdown(null);
   };
+
+  const filteredModels = useMemo(() => (query: string) => {
+    if (!query.trim()) return (models as LiveModel[]).slice(0, 20);
+    const q = query.toLowerCase();
+    return (models as LiveModel[])
+      .filter((m) => m.name.toLowerCase().includes(q) || m.creator.toLowerCase().includes(q))
+      .slice(0, 20);
+  }, [models]);
 
   const barChartData = selectedModels.length > 0 ? benchmarkKeys.map((key) => {
     const entry: Record<string, string | number | null> = { benchmark: key.toUpperCase() };
@@ -127,7 +165,7 @@ export default function ComparePage() {
             <div className="relative flex-1">
               <select
                 value={activeCategory}
-                onChange={(e) => handleCategoryChange(e.target.value as keyof typeof modelsData)}
+                onChange={(e) => handleCategoryChange(e.target.value as ActiveCategory)}
                 className="appearance-none bg-transparent w-full border-b-2 border-outline-variant/40 focus:border-primary pb-1 text-white outline-none cursor-pointer transition-colors pr-6"
               >
                 <option value="llm" className="bg-surface-highest">LLM</option>
@@ -144,55 +182,99 @@ export default function ComparePage() {
           <span className="text-primary text-xs uppercase tracking-widest">
             Nodes ({selectedModelIds.length}/5)
           </span>
+
+          {activeCategory === "llm" && liveLoading && (
+            <div className="text-gray-500 text-xs animate-pulse">Loading models from Open LLM Leaderboard…</div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {selectedModelIds.map((modelId, index) => (
-              <div key={index} className="flex flex-col gap-1">
-                <div className="flex items-center justify-between">
-                  <span
-                    className="text-xs uppercase tracking-widest"
-                    style={{ color: colors[index] }}
-                  >
-                    Node {NODE_LABELS[index]}
-                  </span>
-                  {index >= 2 && (
-                    <button
-                      onClick={() => removeNode(index)}
-                      className="text-[10px] text-gray-600 hover:text-red-400 font-mono uppercase tracking-wider transition-colors"
-                    >
-                      ✕ Remove
-                    </button>
+            {selectedModelIds.map((modelId, index) => {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              const selectedModel = (models as any[]).find((m: any) => m.id === modelId);
+              const isLLM = activeCategory === "llm";
+
+              return (
+                <div key={index} className="flex flex-col gap-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs uppercase tracking-widest" style={{ color: colors[index] }}>
+                      Node {NODE_LABELS[index]}
+                    </span>
+                    {index >= 2 && (
+                      <button
+                        onClick={() => removeNode(index)}
+                        className="text-[10px] text-gray-600 hover:text-red-400 font-mono uppercase tracking-wider transition-colors"
+                      >
+                        ✕ Remove
+                      </button>
+                    )}
+                  </div>
+
+                  {isLLM ? (
+                    /* LLM: searchable text input */
+                    <div className="relative">
+                      <div className="relative flex items-center">
+                        <span className="mr-2 shrink-0 text-xs" style={{ color: colors[index] }}>{">"}</span>
+                        <input
+                          type="text"
+                          value={openDropdown === index ? searchQueries[index] : (selectedModel?.name ?? "")}
+                          onChange={(e) => {
+                            const updated = [...searchQueries];
+                            updated[index] = e.target.value;
+                            setSearchQueries(updated);
+                            setOpenDropdown(index);
+                          }}
+                          onFocus={() => setOpenDropdown(index)}
+                          placeholder="Search models…"
+                          className="bg-transparent w-full border-b-2 border-outline-variant/40 focus:border-primary pb-1 text-white outline-none transition-colors text-sm placeholder:text-gray-600"
+                        />
+                      </div>
+                      {openDropdown === index && (
+                        <div className="absolute top-full left-0 right-0 z-50 bg-surface-highest border border-outline-variant/30 max-h-48 overflow-y-auto shadow-[0_4px_20px_rgba(0,0,0,0.5)] mt-1">
+                          {filteredModels(searchQueries[index]).map((m) => (
+                            <button
+                              key={m.id}
+                              onMouseDown={() => updateNode(index, m.id)}
+                              className={`w-full text-left px-3 py-2 text-xs hover:bg-surface-low transition-colors flex items-center justify-between ${
+                                m.id === modelId ? "text-primary" : "text-gray-300"
+                              }`}
+                            >
+                              <span className="truncate">{m.name}</span>
+                              <span className="text-gray-600 ml-2 shrink-0">{m.params}</span>
+                            </button>
+                          ))}
+                          {filteredModels(searchQueries[index]).length === 0 && (
+                            <div className="px-3 py-2 text-xs text-gray-600">No results</div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    /* Diffusion/Audio: regular select */
+                    <div className="relative flex items-center">
+                      <span className="mr-2 shrink-0 text-xs" style={{ color: colors[index] }}>{">"}</span>
+                      <div className="relative flex-1">
+                        <select
+                          value={modelId}
+                          onChange={(e) => updateNode(index, e.target.value)}
+                          className="appearance-none bg-transparent w-full border-b-2 border-outline-variant/40 focus:border-primary pb-1 text-white outline-none cursor-pointer transition-colors pr-6 text-sm"
+                        >
+                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                          {staticModels.map((m: any) => (
+                            <option key={m.id} value={m.id} className="bg-surface-highest">
+                              {m.name}
+                            </option>
+                          ))}
+                        </select>
+                        <span className="absolute right-0 bottom-1.5 pointer-events-none text-xs leading-none" style={{ color: colors[index] }}>▼</span>
+                      </div>
+                    </div>
                   )}
                 </div>
-                <div className="relative flex items-center">
-                  <span className="mr-2 shrink-0 text-xs" style={{ color: colors[index] }}>
-                    {">"}
-                  </span>
-                  <div className="relative flex-1">
-                    <select
-                      value={modelId}
-                      onChange={(e) => updateNode(index, e.target.value)}
-                      className="appearance-none bg-transparent w-full border-b-2 border-outline-variant/40 focus:border-primary pb-1 text-white outline-none cursor-pointer transition-colors pr-6 text-sm"
-                    >
-                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      {models.map((m: any) => (
-                        <option key={m.id} value={m.id} className="bg-surface-highest">
-                          {m.name}
-                        </option>
-                      ))}
-                    </select>
-                    <span
-                      className="absolute right-0 bottom-1.5 pointer-events-none text-xs leading-none"
-                      style={{ color: colors[index] }}
-                    >
-                      ▼
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
-          {selectedModelIds.length < 5 && (
+          {selectedModelIds.length < 5 && models.length > 0 && (
             <button
               onClick={addNode}
               className="self-start border border-outline-variant/30 hover:border-primary/50 text-primary font-mono text-xs uppercase px-4 py-2 transition-colors hover:bg-primary/5 flex items-center gap-2"
@@ -203,105 +285,78 @@ export default function ComparePage() {
         </div>
       </div>
 
+      {/* Close dropdown when clicking outside */}
+      {openDropdown !== null && (
+        <div className="fixed inset-0 z-40" onClick={() => setOpenDropdown(null)} />
+      )}
+
       {/* Bar Chart */}
-      <section className="bg-surface-low border border-outline-variant/20 p-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-16 h-16 border-t border-r border-outline-variant/30 pointer-events-none"></div>
-        <h2 className="font-mono text-xs uppercase tracking-widest text-primary mb-6 flex items-center gap-2">
-          ▦ Benchmark Array —{" "}
-          <span className="text-gray-500 font-normal flex items-center gap-2">
-            {benchmarkKeys.map((k, i) => {
-              const info = benchmarkMeta[k];
-              return (
-                <span key={k} className="flex items-center gap-1">
-                  {i > 0 && <span className="text-gray-700 mx-1">/</span>}
-                  {info ? (
-                    <BenchmarkTooltip
-                      label={k.toUpperCase()}
-                      description={info.description}
-                      lowerIsBetter={info.lowerIsBetter}
-                    />
-                  ) : (
-                    k.toUpperCase()
-                  )}
-                </span>
-              );
-            })}
-          </span>
-        </h2>
-        <div className="h-[400px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={barChartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#454932" opacity={0.3} vertical={false} />
-              <XAxis
-                dataKey="benchmark"
-                stroke="#e0e6f8"
-                fontFamily="var(--font-jetbrains-mono)"
-                fontSize={12}
-                tickLine={false}
-                axisLine={false}
-              />
-              <YAxis
-                stroke="#e0e6f8"
-                fontFamily="var(--font-jetbrains-mono)"
-                fontSize={12}
-                tickLine={false}
-                axisLine={false}
-              />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: "#2f3445", opacity: 0.4 }} />
-              <Legend
-                wrapperStyle={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "12px" }}
-                iconType="square"
-              />
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              {selectedModels.map((m: any, i: number) => (
-                <Bar key={m.id} dataKey={m.name} fill={colors[i % colors.length]} />
-              ))}
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </section>
+      {selectedModels.length > 0 && (
+        <section className="bg-surface-low border border-outline-variant/20 p-6 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-16 h-16 border-t border-r border-outline-variant/30 pointer-events-none"></div>
+          <h2 className="font-mono text-xs uppercase tracking-widest text-primary mb-6 flex items-center gap-2">
+            ▦ Benchmark Array —{" "}
+            <span className="text-gray-500 font-normal flex items-center gap-2">
+              {benchmarkKeys.map((k, i) => {
+                const info = benchmarkMeta[k];
+                return (
+                  <span key={k} className="flex items-center gap-1">
+                    {i > 0 && <span className="text-gray-700 mx-1">/</span>}
+                    {info ? (
+                      <BenchmarkTooltip label={k.toUpperCase()} description={info.description} lowerIsBetter={info.lowerIsBetter} />
+                    ) : (
+                      k.toUpperCase()
+                    )}
+                  </span>
+                );
+              })}
+            </span>
+          </h2>
+          <div className="h-[400px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={barChartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#454932" opacity={0.3} vertical={false} />
+                <XAxis dataKey="benchmark" stroke="#e0e6f8" fontFamily="var(--font-jetbrains-mono)" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis stroke="#e0e6f8" fontFamily="var(--font-jetbrains-mono)" fontSize={12} tickLine={false} axisLine={false} />
+                <Tooltip content={<CustomTooltip />} cursor={{ fill: "#2f3445", opacity: 0.4 }} />
+                <Legend wrapperStyle={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "12px" }} iconType="square" />
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                {selectedModels.map((m: any, i: number) => (
+                  <Bar key={m.id} dataKey={m.name} fill={colors[i % colors.length]} />
+                ))}
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </section>
+      )}
 
       {/* Radar Chart */}
-      <section className="bg-surface-low border border-outline-variant/20 p-6 relative overflow-hidden">
-        <h2 className="font-mono text-xs uppercase tracking-widest text-primary mb-6">
-          ◈ Node Comparison —{" "}
-          <span className="text-gray-500 font-normal">
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            {selectedModels.map((m: any) => m.name).join(" vs ")}
-          </span>
-        </h2>
-        <div className="h-[500px] w-full flex items-center justify-center">
-          <ResponsiveContainer width="100%" height="100%">
-            <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarChartData}>
-              <PolarGrid stroke="#454932" />
-              <PolarAngleAxis
-                dataKey="subject"
-                tick={{ fill: "#e0e6f8", fontSize: 12, fontFamily: "var(--font-jetbrains-mono)" }}
-              />
-              <PolarRadiusAxis angle={30} tick={{ fill: "#e0e6f8", fontSize: 10 }} />
+      {selectedModels.length > 0 && (
+        <section className="bg-surface-low border border-outline-variant/20 p-6 relative overflow-hidden">
+          <h2 className="font-mono text-xs uppercase tracking-widest text-primary mb-6">
+            ◈ Node Comparison —{" "}
+            <span className="text-gray-500 font-normal">
               {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              {selectedModels.map((m: any, i: number) => (
-                <Radar
-                  key={m.id}
-                  name={m.name}
-                  dataKey={m.name}
-                  stroke={colors[i % colors.length]}
-                  fill={colors[i % colors.length]}
-                  fillOpacity={0.15}
-                />
-              ))}
-              <Legend
-                wrapperStyle={{
-                  fontFamily: "var(--font-jetbrains-mono)",
-                  fontSize: "12px",
-                  marginTop: "20px",
-                }}
-              />
-              <Tooltip content={<CustomTooltip />} />
-            </RadarChart>
-          </ResponsiveContainer>
-        </div>
-      </section>
+              {selectedModels.map((m: any) => m.name).join(" vs ")}
+            </span>
+          </h2>
+          <div className="h-[500px] w-full flex items-center justify-center">
+            <ResponsiveContainer width="100%" height="100%">
+              <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarChartData}>
+                <PolarGrid stroke="#454932" />
+                <PolarAngleAxis dataKey="subject" tick={{ fill: "#e0e6f8", fontSize: 12, fontFamily: "var(--font-jetbrains-mono)" }} />
+                <PolarRadiusAxis angle={30} tick={{ fill: "#e0e6f8", fontSize: 10 }} />
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                {selectedModels.map((m: any, i: number) => (
+                  <Radar key={m.id} name={m.name} dataKey={m.name} stroke={colors[i % colors.length]} fill={colors[i % colors.length]} fillOpacity={0.15} />
+                ))}
+                <Legend wrapperStyle={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "12px", marginTop: "20px" }} />
+                <Tooltip content={<CustomTooltip />} />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+        </section>
+      )}
     </>
   );
 }

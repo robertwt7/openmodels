@@ -1,29 +1,43 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
-import { Activity, Zap, ExternalLink, Radio } from "lucide-react";
-import modelsData from "@/data/models.json";
+import { ExternalLink, Zap, Radio } from "lucide-react";
 import { useLeaderboard } from "@/lib/hooks/useLeaderboard";
 import type { LiveModel } from "@/lib/hf-api";
 
 const PAGE_SIZE = 50;
 
+const ARCH_OPTIONS = ["All", "Transformer", "MoE", "SSM"];
+const TYPE_OPTIONS = ["All", "chat", "base", "instruct", "merge", "finetune"];
+
 export default function Home() {
   const [query, setQuery] = useState("");
   const [offset, setOffset] = useState(0);
-
-  const allModels = modelsData.llm;
-  const filtered = query.trim()
-    ? allModels.filter((m) =>
-        [m.name, m.architecture, m.creator, m.description]
-          .join(" ")
-          .toLowerCase()
-          .includes(query.toLowerCase())
-      )
-    : allModels;
+  const [archFilter, setArchFilter] = useState("All");
+  const [typeFilter, setTypeFilter] = useState("All");
 
   const { data, isLoading, isError, isFetching } = useLeaderboard(offset, PAGE_SIZE);
+
+  const displayModels = useMemo(() => {
+    if (!data?.models) return [];
+    return data.models.filter((m) => {
+      const matchQuery =
+        !query.trim() ||
+        [m.name, m.creator, m.architecture, m.type]
+          .join(" ")
+          .toLowerCase()
+          .includes(query.toLowerCase());
+      const matchArch =
+        archFilter === "All" ||
+        m.architecture.toLowerCase() === archFilter.toLowerCase() ||
+        (archFilter === "MoE" && m.isMoE);
+      const matchType =
+        typeFilter === "All" ||
+        m.type.toLowerCase() === typeFilter.toLowerCase();
+      return matchQuery && matchArch && matchType;
+    });
+  }, [data, query, archFilter, typeFilter]);
 
   return (
     <>
@@ -44,44 +58,59 @@ export default function Home() {
         </p>
       </header>
 
-      {/* Search / Input Field */}
-      <section className="bg-surface-lowest p-6 rounded relative overflow-hidden group">
-        <div className="absolute top-0 left-0 w-1 h-full bg-primary/50 group-focus-within:bg-primary transition-colors"></div>
-        <div className="flex items-center gap-4">
-          <span className="text-primary font-mono text-xl">{">"}</span>
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Query models by name, architecture, or benchmark..."
-            className="bg-transparent w-full text-white font-mono placeholder:text-gray-600 outline-none border-b-2 border-outline-variant/40 focus:border-primary pb-2 transition-colors"
-          />
-        </div>
-      </section>
-
-      {/* Curated Model Data Stream */}
-      <section className="flex flex-col gap-8">
-        <div className="flex items-center justify-between border-b border-outline-variant/20 pb-4">
-          <h2 className="font-display text-2xl uppercase tracking-wider text-white">
-            Data Streams <span className="animate-blink text-primary">_</span>
-          </h2>
-          <div className="text-xs font-mono text-secondary-container bg-secondary-container/10 px-3 py-1 border border-secondary-container/20 flex items-center gap-2">
-            <span className="w-1.5 h-1.5 bg-secondary-container"></span>
-            {filtered.length} / {allModels.length} MODELS
+      {/* Search + Filters */}
+      <section className="flex flex-col gap-4">
+        <div className="bg-surface-lowest p-6 rounded relative overflow-hidden group">
+          <div className="absolute top-0 left-0 w-1 h-full bg-primary/50 group-focus-within:bg-primary transition-colors"></div>
+          <div className="flex items-center gap-4">
+            <span className="text-primary font-mono text-xl">{">"}</span>
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => { setQuery(e.target.value); setOffset(0); }}
+              placeholder="Query models by name, architecture, creator, or type..."
+              className="bg-transparent w-full text-white font-mono placeholder:text-gray-600 outline-none border-b-2 border-outline-variant/40 focus:border-primary pb-2 transition-colors"
+            />
           </div>
         </div>
 
-        {filtered.length === 0 ? (
-          <div className="font-mono text-gray-500 text-sm py-8 text-center border border-outline-variant/10 bg-surface-low">
-            <span className="text-primary">{">"}</span> NO MATCH FOUND FOR &quot;{query}&quot;
-          </div>
-        ) : (
-          <div className="grid gap-4">
-            {filtered.map((model) => (
-              <ModelCard key={model.id} model={model} />
+        <div className="flex flex-wrap gap-3 font-mono text-xs">
+          {/* Architecture filter */}
+          <div className="flex items-center gap-2">
+            <span className="text-gray-500 uppercase tracking-wider">Arch:</span>
+            {ARCH_OPTIONS.map((opt) => (
+              <button
+                key={opt}
+                onClick={() => { setArchFilter(opt); setOffset(0); }}
+                className={`px-3 py-1 border transition-colors uppercase ${
+                  archFilter === opt
+                    ? "border-primary text-primary bg-primary/10"
+                    : "border-outline-variant/30 text-gray-500 hover:text-gray-300 hover:border-outline-variant/60"
+                }`}
+              >
+                {opt}
+              </button>
             ))}
           </div>
-        )}
+
+          {/* Type filter */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-gray-500 uppercase tracking-wider">Type:</span>
+            {TYPE_OPTIONS.map((opt) => (
+              <button
+                key={opt}
+                onClick={() => { setTypeFilter(opt); setOffset(0); }}
+                className={`px-3 py-1 border transition-colors uppercase ${
+                  typeFilter === opt
+                    ? "border-secondary-container text-secondary-container bg-secondary-container/10"
+                    : "border-outline-variant/30 text-gray-500 hover:text-gray-300 hover:border-outline-variant/60"
+                }`}
+              >
+                {opt}
+              </button>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* Live Leaderboard Feed */}
@@ -89,7 +118,7 @@ export default function Home() {
         <div className="flex items-center justify-between border-b border-outline-variant/20 pb-4">
           <h2 className="font-display text-2xl uppercase tracking-wider text-white flex items-center gap-3">
             <Radio className="w-5 h-5 text-primary animate-pulse" />
-            Live Feed
+            Open LLM Leaderboard
           </h2>
           <div className="flex items-center gap-3">
             {data && (
@@ -98,14 +127,11 @@ export default function Home() {
                 {offset + 1}–{Math.min(offset + PAGE_SIZE, data.total)} / {data.total} MODELS
               </div>
             )}
-            <div className="text-xs font-mono text-gray-500 px-3 py-1 border border-outline-variant/20">
-              HF LEADERBOARD
-            </div>
           </div>
         </div>
 
         <p className="text-sm text-gray-500 font-mono -mt-4">
-          LIVE_FEED: open-llm-leaderboard/contents — real-time rankings from HuggingFace
+          DATA: open-llm-leaderboard/contents via HuggingFace · refreshed every 5 min
         </p>
 
         {isError && (
@@ -118,16 +144,22 @@ export default function Home() {
 
         {isLoading && (
           <div className="grid gap-4">
-            {Array.from({ length: 5 }).map((_, i) => (
+            {Array.from({ length: 8 }).map((_, i) => (
               <SkeletonCard key={i} />
             ))}
           </div>
         )}
 
-        {data && !isLoading && (
+        {data && !isLoading && displayModels.length === 0 && (
+          <div className="font-mono text-gray-500 text-sm py-8 text-center border border-outline-variant/10 bg-surface-low">
+            <span className="text-primary">{">"}</span> NO MATCH FOUND
+          </div>
+        )}
+
+        {data && !isLoading && displayModels.length > 0 && (
           <>
             <div className="grid gap-4">
-              {data.models.map((model) => (
+              {displayModels.map((model) => (
                 <LiveModelCard key={`${model.id}-${offset}`} model={model} />
               ))}
             </div>
@@ -142,7 +174,7 @@ export default function Home() {
                 ← Prev
               </button>
               <span className="text-xs font-mono text-gray-600">
-                Page {Math.floor(offset / PAGE_SIZE) + 1} of {Math.ceil(data.total / PAGE_SIZE)}
+                Page {Math.floor(offset / PAGE_SIZE) + 1} of {Math.ceil((data.total) / PAGE_SIZE)}
               </span>
               <button
                 onClick={() => setOffset((prev) => prev + PAGE_SIZE)}
@@ -159,78 +191,16 @@ export default function Home() {
   );
 }
 
-function ModelCard({ model }: { model: (typeof modelsData.llm)[number] }) {
-  return (
-    <div className="bg-surface-low hover:bg-surface-high transition-colors p-6 flex flex-col lg:flex-row gap-6 lg:items-center justify-between group relative overflow-hidden border border-outline-variant/10">
-      {/* Stretched link covering the whole card */}
-      <Link href={`/models/llm/${model.id}`} className="absolute inset-0 z-0" aria-label={`View ${model.name}`} />
-
-      {/* Decorative corner */}
-      <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-outline-variant/40 pointer-events-none"></div>
-
-      <div className="flex flex-col gap-2 relative z-10 pointer-events-none">
-        <div className="flex items-center gap-3 flex-wrap">
-          <h3 className="font-display text-xl font-bold text-white group-hover:text-primary transition-colors">{model.name}</h3>
-          <div className="text-xs font-mono border border-outline-variant/20 px-2 py-0.5 text-gray-400">
-            {model.architecture}
-          </div>
-          {"huggingFaceId" in model && model.huggingFaceId && (
-            <a
-              href={`https://huggingface.co/${model.huggingFaceId}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="pointer-events-auto flex items-center gap-1 text-[10px] font-mono border border-outline-variant/20 px-2 py-0.5 text-gray-400 hover:text-primary hover:border-primary/40 transition-colors"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <ExternalLink className="w-2.5 h-2.5" />
-              HF
-            </a>
-          )}
-        </div>
-        <p className="text-sm text-gray-400 max-w-xl">{model.description}</p>
-        <div className="flex gap-4 mt-2">
-          <div className="flex items-center gap-2 text-xs font-mono text-gray-500">
-            <Zap className="w-3 h-3 text-primary" />
-            Creator: <span className="text-gray-300">{model.creator}</span>
-          </div>
-          <div className="flex items-center gap-2 text-xs font-mono text-gray-500">
-            <Activity className="w-3 h-3 text-secondary-container" />
-            Released: <span className="text-gray-300">{model.releaseDate}</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex flex-col sm:flex-row gap-4 lg:items-center shrink-0 relative z-10 pointer-events-none">
-        <div className="bg-surface-highest p-4 rounded-sm flex gap-6 border border-outline-variant/10 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)]">
-          <div className="flex flex-col gap-1">
-            <span className="text-[10px] text-gray-500 font-mono uppercase">Params</span>
-            <span className="font-mono text-white text-sm">{model.params}</span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-[10px] text-gray-500 font-mono uppercase">MMLU-Pro</span>
-            <span className="font-mono text-primary text-sm">{model.benchmarks.mmluPro != null ? `${model.benchmarks.mmluPro}%` : "—"}</span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-[10px] text-gray-500 font-mono uppercase">Context</span>
-            <span className="font-mono text-secondary-container text-sm">{model.context}</span>
-          </div>
-        </div>
-
-        <span className="h-full px-4 border border-outline-variant/20 group-hover:border-primary/50 text-primary font-mono text-xs uppercase flex items-center justify-center transition-colors bg-surface-lowest group-hover:bg-primary/5">
-          View &rarr;
-        </span>
-      </div>
-    </div>
-  );
-}
-
 function LiveModelCard({ model }: { model: LiveModel }) {
   return (
     <div className="bg-surface-low hover:bg-surface-high transition-colors p-5 flex flex-col lg:flex-row gap-4 lg:items-center justify-between group relative overflow-hidden border border-outline-variant/10">
+      {/* Stretched link covering the whole card */}
+      <Link href={`/models/llm/${model.id}`} className="absolute inset-0 z-0" aria-label={`View ${model.name}`} />
+
       <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-primary/20 pointer-events-none"></div>
       <div className="absolute top-0 left-0 w-0.5 h-full bg-primary/10 group-hover:bg-primary/30 transition-colors pointer-events-none"></div>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 relative z-10 pointer-events-none">
         <div className="flex items-center gap-3 flex-wrap">
           <h3 className="font-display text-lg font-bold text-white group-hover:text-primary transition-colors">
             {model.name}
@@ -252,7 +222,8 @@ function LiveModelCard({ model }: { model: LiveModel }) {
             href={`https://huggingface.co/${model.huggingFaceId}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 text-[10px] font-mono border border-outline-variant/20 px-2 py-0.5 text-gray-400 hover:text-primary hover:border-primary/40 transition-colors"
+            className="pointer-events-auto flex items-center gap-1 text-[10px] font-mono border border-outline-variant/20 px-2 py-0.5 text-gray-400 hover:text-primary hover:border-primary/40 transition-colors z-10 relative"
+            onClick={(e) => e.stopPropagation()}
           >
             <ExternalLink className="w-2.5 h-2.5" />
             HF
@@ -269,7 +240,7 @@ function LiveModelCard({ model }: { model: LiveModel }) {
         </div>
       </div>
 
-      <div className="bg-surface-highest p-3 rounded-sm flex gap-4 border border-outline-variant/10 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] shrink-0 flex-wrap">
+      <div className="bg-surface-highest p-3 rounded-sm flex gap-4 border border-outline-variant/10 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] shrink-0 flex-wrap relative z-10 pointer-events-none">
         <div className="flex flex-col gap-1">
           <span className="text-[10px] text-gray-500 font-mono uppercase">Params</span>
           <span className="font-mono text-white text-sm">{model.params}</span>
@@ -292,13 +263,11 @@ function LiveModelCard({ model }: { model: LiveModel }) {
             {model.benchmarks.bbh != null ? `${model.benchmarks.bbh}%` : "—"}
           </span>
         </div>
-        <div className="flex flex-col gap-1">
-          <span className="text-[10px] text-gray-500 font-mono uppercase">GPQA</span>
-          <span className="font-mono text-gray-300 text-sm">
-            {model.benchmarks.gpqa != null ? `${model.benchmarks.gpqa}%` : "—"}
-          </span>
-        </div>
       </div>
+
+      <span className="h-full px-4 border border-outline-variant/20 group-hover:border-primary/50 text-primary font-mono text-xs uppercase flex items-center justify-center transition-colors bg-surface-lowest group-hover:bg-primary/5 shrink-0 relative z-10 pointer-events-none">
+        View &rarr;
+      </span>
     </div>
   );
 }

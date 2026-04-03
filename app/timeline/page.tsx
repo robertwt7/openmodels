@@ -4,10 +4,11 @@ import { useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import modelsData from "@/data/models.json";
 import { Category } from "@/lib/benchmarks";
+import { useLeaderboardFull } from "@/lib/hooks/useLeaderboardFull";
+import type { LiveModel } from "@/lib/hf-api";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type LLMModel = (typeof modelsData.llm)[number];
 type DiffusionModel = (typeof modelsData.diffusion)[number];
 type AudioModel = (typeof modelsData.audio)[number];
 
@@ -41,18 +42,20 @@ function buildMonthRange(start: string, end: string): string[] {
   return months;
 }
 
-function normaliseModels(): TimelineModel[] {
-  const llms: TimelineModel[] = modelsData.llm.map((m: LLMModel) => ({
-    id: m.id,
-    name: m.name,
-    creator: m.creator,
-    category: "llm" as Category,
-    params: m.params,
-    releaseDate: m.releaseDate,
-    benchmarkLabel: "MMLU-Pro",
-    benchmarkValue: m.benchmarks.mmluPro != null ? `${m.benchmarks.mmluPro}%` : "—",
-    href: `/models/llm/${m.id}`,
-  }));
+function normaliseModels(liveLLMs: LiveModel[]): TimelineModel[] {
+  const llms: TimelineModel[] = liveLLMs
+    .filter((m) => m.releaseDate != null)
+    .map((m) => ({
+      id: m.id,
+      name: m.name,
+      creator: m.creator,
+      category: "llm" as Category,
+      params: m.params,
+      releaseDate: m.releaseDate!,
+      benchmarkLabel: "Avg",
+      benchmarkValue: m.benchmarks.average != null ? `${m.benchmarks.average}%` : "—",
+      href: `/models/llm/${m.id}`,
+    }));
 
   const diffusions: TimelineModel[] = modelsData.diffusion.map((m: DiffusionModel) => ({
     id: m.id,
@@ -81,8 +84,7 @@ function normaliseModels(): TimelineModel[] {
   return [...llms, ...diffusions, ...audios];
 }
 
-// Month range is always computed across ALL models regardless of active filters
-// so the axis never shifts when toggling categories.
+// Month range computed across ALL models so axis never shifts when toggling
 function computeMonthRange(all: TimelineModel[]): string[] {
   const dates = all.map((m) => toYearMonth(m.releaseDate)).sort();
   if (dates.length === 0) return [];
@@ -124,7 +126,10 @@ const CATEGORY_CONFIG: Record<Category, { label: string; color: string; borderCo
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function TimelinePage() {
-  const allModels = normaliseModels();
+  const { data: liveData, isLoading: llmLoading } = useLeaderboardFull();
+  const liveLLMs: LiveModel[] = liveData?.models ?? [];
+
+  const allModels = normaliseModels(liveLLMs);
   const monthRange = computeMonthRange(allModels);
   const byMonth = groupByMonth(allModels);
 
@@ -156,6 +161,9 @@ export default function TimelinePage() {
               Chronological Index
               <span className="text-primary animate-blink ml-1">_</span>
             </h1>
+            {llmLoading && (
+              <span className="text-xs font-mono text-gray-600 animate-pulse">Loading LLM data…</span>
+            )}
           </div>
           {/* Category filter chips */}
           <div className="flex gap-2">
@@ -216,23 +224,14 @@ function VerticalTimeline({
   return (
     <div className="px-8 py-8 flex flex-col gap-12">
       {Object.entries(years).map(([year, months]) => (
-        <YearSection
-          key={year}
-          year={year}
-          months={months}
-          byMonth={byMonth}
-          active={active}
-        />
+        <YearSection key={year} year={year} months={months} byMonth={byMonth} active={active} />
       ))}
     </div>
   );
 }
 
 function YearSection({
-  year,
-  months,
-  byMonth,
-  active,
+  year, months, byMonth, active,
 }: {
   year: string;
   months: string[];
@@ -246,27 +245,21 @@ function YearSection({
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Year banner */}
       <div className="flex items-center gap-4">
         <span className="font-mono text-primary text-3xl font-bold leading-none">{year}</span>
         <div className="flex-1 h-px bg-outline-variant/30" />
       </div>
-
-      {/* Month rows */}
       {months.map((ym) => {
         const visibleModels = (byMonth.get(ym) ?? []).filter((m) => active[m.category]);
         if (visibleModels.length === 0) return null;
         const monthIdx = Number(ym.split("-")[1]) - 1;
-
         return (
           <div key={ym} className="flex gap-6">
-            {/* Month label */}
             <div className="w-12 shrink-0 pt-1">
               <span className="font-mono text-[11px] uppercase tracking-wider text-gray-500">
                 {MONTH_NAMES[monthIdx]}
               </span>
             </div>
-            {/* Cards */}
             <div className="flex flex-wrap gap-3">
               {visibleModels.map((model) => (
                 <TimelineModelCard key={model.id} model={model} />
@@ -289,24 +282,15 @@ function TimelineModelCard({ model }: { model: TimelineModel }) {
       href={model.href}
       className="w-[220px] block bg-surface-low hover:bg-surface-high border border-outline-variant/10 hover:border-outline-variant/30 p-3 relative overflow-hidden transition-colors no-underline group"
     >
-      {/* Corner decoration */}
       <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-outline-variant/40" />
-
-      {/* Category badge */}
       <div className={`inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-widest mb-2 ${cfg.color}`}>
         <span className={`w-1.5 h-1.5 shrink-0 ${cfg.color.replace("text-","bg-")}`} />
         {cfg.label}
       </div>
-
-      {/* Model name */}
       <div className="font-display font-bold text-sm text-white group-hover:text-primary transition-colors leading-tight mb-1">
         {model.name}
       </div>
-
-      {/* Creator */}
       <div className="font-mono text-[10px] text-gray-500 mb-3">{model.creator}</div>
-
-      {/* Stats row */}
       <div className="bg-surface-highest border border-outline-variant/10 p-2 flex gap-4">
         <div className="flex flex-col gap-0.5">
           <span className="font-mono text-[9px] uppercase text-gray-600">Params</span>
@@ -317,8 +301,6 @@ function TimelineModelCard({ model }: { model: TimelineModel }) {
           <span className="font-mono text-xs text-primary">{model.benchmarkValue}</span>
         </div>
       </div>
-
-      {/* View link */}
       <div className="mt-2 font-mono text-[10px] text-gray-600 group-hover:text-primary transition-colors text-right">
         View →
       </div>

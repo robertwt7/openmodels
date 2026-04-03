@@ -7,6 +7,14 @@ export interface BenchmarkMeta {
 }
 
 export const benchmarkMeta: Record<string, BenchmarkMeta> = {
+  average: {
+    key: "average",
+    label: "Average",
+    unit: "%",
+    description:
+      "Overall average score across IFEval, BBH, MATH Lvl 5, GPQA, MuSR, and MMLU-PRO benchmarks as reported by the Open LLM Leaderboard.",
+    lowerIsBetter: false,
+  },
   bbh: {
     key: "bbh",
     label: "BBH",
@@ -108,7 +116,7 @@ export const benchmarkMeta: Record<string, BenchmarkMeta> = {
 export type Category = "llm" | "diffusion" | "audio";
 
 export const categoryBenchmarks: Record<Category, string[]> = {
-  llm: ["bbh", "gpqa", "mathHard", "musr", "ifeval", "mmluPro"],
+  llm: ["average", "bbh", "gpqa", "mathHard", "musr", "ifeval", "mmluPro"],
   diffusion: ["fid", "clipScore", "genSpeed"],
   audio: ["wer", "latency", "multilingual"],
 };

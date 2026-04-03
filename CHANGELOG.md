@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-04-03
+
+### Changed
+- **LLM data source migrated to live HF API:** All pages now fetch LLM data live from `open-llm-leaderboard/contents` via the HuggingFace Datasets Server API. The static curated LLM section of `data/models.json` is deprecated (retained for reference).
+- **Index page (`/`):** Removed static "Data Streams" curated section. The live leaderboard feed is now the only LLM listing. Added Architecture and Type filter chips. Model cards now link to `/models/llm/{id}`.
+- **Leaderboard page (`/leaderboard`):** LLM tab switched to live paginated data with sortable columns. Added "Average ⬆" column (overall leaderboard score). Added Architecture/Type filters, pagination, and an attribution footer. Diffusion/Audio tabs unchanged.
+- **Compare page (`/compare`):** LLM model selection now uses text-search over the full live dataset (via `useLeaderboardFull`). Diffusion/Audio use `<select>` as before.
+- **Model detail page (`/models/llm/[id]`):** LLM detail now sources data from the live API. Shows `type`, `license`, `isMoE` badge, and rank. Drops `description` and `context` (unavailable from leaderboard API). Peer table limited to top 5, bottom 3, and ±5 around the current model.
+- **Timeline page (`/timeline`):** LLM models now sourced from live API. Only models with a known release date (from `data/llm-dates.json`) appear. Shows loading indicator while LLM data loads.
+
+### Added
+- **`data/llm-dates.json`:** Supplementary `{ huggingFaceId: releaseDate }` map used to enrich live `LiveModel` objects with release dates. Populated initially from the 43 curated models; updated automatically by `scripts/fetch-hf-leaderboard.ts`.
+- **`/api/hf-leaderboard-full`:** New API route that fetches the entire leaderboard dataset in parallel batches and enriches with release dates. Cached for 10 minutes.
+- **`useLeaderboardFull` hook:** React Query hook for the full-dataset route (10-minute stale time).
+- **`average` benchmark:** Added to `lib/benchmarks.ts` registry and `categoryBenchmarks.llm`. Appears in leaderboard columns, benchmark cards, radar chart, and compare charts.
+- **`releaseDate` on `LiveModel`:** Enriched server-side from `llm-dates.json` in both API routes.
+
 ## [1.1.0] - 2026-03-31
 
 ### Added

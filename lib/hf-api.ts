@@ -35,14 +35,15 @@ export interface LiveModel {
   isMoE: boolean;
   type: string;
   license: string;
+  releaseDate: string | null;
   benchmarks: {
+    average: number | null;
     bbh: number | null;
     gpqa: number | null;
     mathHard: number | null;
     musr: number | null;
     ifeval: number | null;
     mmluPro: number | null;
-    average: number | null;
   };
 }
 
@@ -101,14 +102,15 @@ export function mapHFRowToModel(row: HFLeaderboardRow): LiveModel {
     isMoE: row.MoE ?? false,
     type: row.Type ?? "",
     license: row["Hub License"] ?? "",
+    releaseDate: null, // enriched server-side from llm-dates.json
     benchmarks: {
+      average: round2(row["Average ⬆️"]),
       bbh: round2(row.BBH),
       gpqa: round2(row.GPQA),
       mathHard: round2(row["MATH Lvl 5"]),
       musr: round2(row.MUSR),
       ifeval: round2(row.IFEval),
       mmluPro: round2(row["MMLU-PRO"]),
-      average: round2(row["Average ⬆️"]),
     },
   };
 }

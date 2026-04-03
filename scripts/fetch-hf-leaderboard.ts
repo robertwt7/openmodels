@@ -7,7 +7,7 @@
  * Outputs: data/hf-fetched-models.json
  */
 
-import { writeFileSync } from "fs";
+import { writeFileSync, readFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 
@@ -426,6 +426,7 @@ async function main() {
   const results: ModelEntry[] = [];
   const seen = new Set<string>();
 
+
   for (const org of TARGET_ORGS) {
     console.log(`\n[${org}]`);
     const models = await listOrgModels(org);
@@ -460,6 +461,24 @@ async function main() {
   const outPath = join(__dirname, "../data/hf-fetched-models.json");
   writeFileSync(outPath, JSON.stringify(results, null, 2));
   console.log(`✓ Written to ${outPath}`);
+
+  // Update llm-dates.json with newly fetched release dates
+  const datesPath = join(__dirname, "../data/llm-dates.json");
+  let existingDates: Record<string, string> = {};
+  try {
+    existingDates = JSON.parse(readFileSync(datesPath, "utf-8"));
+  } catch {
+    // File doesn't exist yet, start fresh
+  }
+  const newDates = results.reduce((acc, m) => {
+    if (m.releaseDate && m.releaseDate !== "2024-01-01") {
+      acc[m.huggingFaceId] = m.releaseDate;
+    }
+    return acc;
+  }, {} as Record<string, string>);
+  const mergedDates = { ...existingDates, ...newDates };
+  writeFileSync(datesPath, JSON.stringify(mergedDates, null, 2));
+  console.log(`✓ Updated ${datesPath} with ${Object.keys(mergedDates).length} entries`);
 }
 
 main().catch(console.error);

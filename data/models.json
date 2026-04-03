@@ -1,4 +1,5 @@
 {
+  "_llm_deprecated": "LLM data in this file is no longer used by the app. The app now fetches LLM data live from open-llm-leaderboard/contents via /api/hf-leaderboard. This data is kept for reference and as a source for data/llm-dates.json.",
   "llm": [
     {
       "id": "qwen-qwen2-5-72b",
