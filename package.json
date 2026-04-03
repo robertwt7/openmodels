@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "fetch-hf": "npx tsx scripts/fetch-hf-leaderboard.ts",
+    "merge-hf": "npx tsx scripts/merge-hf-models.ts",
+    "update-hf": "npx tsx scripts/fetch-hf-leaderboard.ts && npx tsx scripts/merge-hf-models.ts"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.96.0",
