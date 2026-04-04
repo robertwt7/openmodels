@@ -28,10 +28,13 @@ export async function GET(request: NextRequest) {
     const data: HFLeaderboardResponse = await res.json();
     const dates = llmDates as Record<string, string>;
 
-    // Transform to LiveModel[] and enrich with release dates
+    // Transform to LiveModel[] — Upload To Hub Date is mapped automatically;
+    // fall back to llm-dates.json for models missing that field
     const models = data.rows.map((r) => {
       const m = mapHFRowToModel(r.row);
-      m.releaseDate = dates[m.huggingFaceId] ?? null;
+      if (!m.releaseDate) {
+        m.releaseDate = dates[m.huggingFaceId] ?? null;
+      }
       return m;
     });
 

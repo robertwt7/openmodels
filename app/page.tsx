@@ -9,7 +9,7 @@ import type { LiveModel } from "@/lib/hf-api";
 const PAGE_SIZE = 50;
 
 const ARCH_OPTIONS = ["All", "Transformer", "MoE", "SSM"];
-const TYPE_OPTIONS = ["All", "chat", "base", "instruct", "merge", "finetune"];
+const TYPE_OPTIONS = ["All", "pretrained", "chat", "fine-tuned", "instruct", "merge"];
 
 export default function Home() {
   const [query, setQuery] = useState("");
@@ -193,54 +193,51 @@ export default function Home() {
 
 function LiveModelCard({ model }: { model: LiveModel }) {
   return (
-    <div className="bg-surface-low hover:bg-surface-high transition-colors p-5 flex flex-col lg:flex-row gap-4 lg:items-center justify-between group relative overflow-hidden border border-outline-variant/10">
+    <div className="bg-surface-low hover:bg-surface-high transition-colors p-5 flex flex-col lg:flex-row gap-4 lg:items-center group relative overflow-hidden border border-outline-variant/10">
       {/* Stretched link covering the whole card */}
       <Link href={`/models/llm/${model.id}`} className="absolute inset-0 z-0" aria-label={`View ${model.name}`} />
 
       <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-primary/20 pointer-events-none"></div>
       <div className="absolute top-0 left-0 w-0.5 h-full bg-primary/10 group-hover:bg-primary/30 transition-colors pointer-events-none"></div>
 
-      <div className="flex flex-col gap-2 relative z-10 pointer-events-none">
-        <div className="flex items-center gap-3 flex-wrap">
-          <h3 className="font-display text-lg font-bold text-white group-hover:text-primary transition-colors">
+      {/* Left section: name + badges + creator — takes remaining space */}
+      <div className="flex flex-col gap-2 relative z-10 pointer-events-none flex-1 min-w-0">
+        <div className="flex items-center gap-2 flex-wrap">
+          <h3 className="font-display text-lg font-bold text-white group-hover:text-primary transition-colors truncate">
             {model.name}
           </h3>
-          <div className="text-xs font-mono border border-outline-variant/20 px-2 py-0.5 text-gray-400">
-            {model.architecture}
-          </div>
-          {model.isMoE && (
-            <div className="text-xs font-mono border border-secondary-container/30 px-2 py-0.5 text-secondary-container">
-              MoE
-            </div>
-          )}
-          {model.type && (
-            <div className="text-xs font-mono border border-outline-variant/10 px-2 py-0.5 text-gray-600 uppercase">
-              {model.type}
-            </div>
-          )}
           <a
             href={`https://huggingface.co/${model.huggingFaceId}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="pointer-events-auto flex items-center gap-1 text-[10px] font-mono border border-outline-variant/20 px-2 py-0.5 text-gray-400 hover:text-primary hover:border-primary/40 transition-colors z-10 relative"
+            className="pointer-events-auto flex items-center gap-1 text-[10px] font-mono border border-outline-variant/20 px-2 py-0.5 text-gray-400 hover:text-primary hover:border-primary/40 transition-colors z-10 relative shrink-0"
             onClick={(e) => e.stopPropagation()}
           >
             <ExternalLink className="w-2.5 h-2.5" />
             HF
           </a>
         </div>
-        <div className="flex gap-4">
+        <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-2 text-xs font-mono text-gray-500">
             <Zap className="w-3 h-3 text-primary" />
             <span className="text-gray-300">{model.creator}</span>
           </div>
+          <div className="text-xs font-mono border border-outline-variant/20 px-2 py-0.5 text-gray-400">
+            {model.architecture}
+          </div>
+          {model.type && model.type !== "unknown" && (
+            <div className="text-xs font-mono border border-outline-variant/10 px-2 py-0.5 text-gray-600 uppercase">
+              {model.type}
+            </div>
+          )}
           {model.license && (
             <div className="text-xs font-mono text-gray-600">{model.license}</div>
           )}
         </div>
       </div>
 
-      <div className="bg-surface-highest p-3 rounded-sm flex gap-4 border border-outline-variant/10 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] shrink-0 flex-wrap relative z-10 pointer-events-none">
+      {/* Stats block — fixed width so it aligns across rows */}
+      <div className="bg-surface-highest p-3 rounded-sm grid grid-cols-4 gap-4 border border-outline-variant/10 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] shrink-0 w-full lg:w-80 relative z-10 pointer-events-none">
         <div className="flex flex-col gap-1">
           <span className="text-[10px] text-gray-500 font-mono uppercase">Params</span>
           <span className="font-mono text-white text-sm">{model.params}</span>
@@ -265,7 +262,8 @@ function LiveModelCard({ model }: { model: LiveModel }) {
         </div>
       </div>
 
-      <span className="h-full px-4 border border-outline-variant/20 group-hover:border-primary/50 text-primary font-mono text-xs uppercase flex items-center justify-center transition-colors bg-surface-lowest group-hover:bg-primary/5 shrink-0 relative z-10 pointer-events-none">
+      {/* View button — fixed width */}
+      <span className="h-full px-4 py-3 border border-outline-variant/20 group-hover:border-primary/50 text-primary font-mono text-xs uppercase flex items-center justify-center transition-colors bg-surface-lowest group-hover:bg-primary/5 shrink-0 lg:w-20 relative z-10 pointer-events-none">
         View &rarr;
       </span>
     </div>

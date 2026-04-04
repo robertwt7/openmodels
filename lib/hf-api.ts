@@ -15,6 +15,8 @@ export interface HFLeaderboardRow {
   Type: string | null;
   "Hub License": string | null;
   MoE: boolean | null;
+  "Upload To Hub Date": string | null;
+  Merged: boolean | null;
 }
 
 export interface HFLeaderboardResponse {
@@ -91,18 +93,49 @@ function round2(v: number | null): number | null {
   return Math.round(v * 100) / 100;
 }
 
+/**
+ * Normalize HF Type strings like "💬 chat models (RLHF, DPO, IFT, ...)" → "chat"
+ * and "🟢 pretrained" → "pretrained"
+ */
+function normalizeType(raw: string | null, merged: boolean | null): string {
+  if (merged) return "merge";
+  if (!raw) return "unknown";
+  const lower = raw.toLowerCase();
+  if (lower.includes("pretrained")) return "pretrained";
+  if (lower.includes("chat")) return "chat";
+  if (lower.includes("fine-tuned") || lower.includes("finetuned") || lower.includes("ift")) return "fine-tuned";
+  if (lower.includes("instruction") || lower.includes("instruct")) return "instruct";
+  if (lower.includes("merge")) return "merge";
+  if (lower.includes("base")) return "pretrained";
+  return "unknown";
+}
+
+/**
+ * Normalize HF Architecture strings like "LlamaForCausalLM" → "Transformer"
+ */
+function normalizeArchitecture(raw: string | null, isMoE: boolean): string {
+  if (isMoE) return "MoE";
+  if (!raw) return "Transformer";
+  const lower = raw.toLowerCase();
+  if (lower.includes("mamba") || lower.includes("ssm") || lower.includes("rwkv")) return "SSM";
+  if (lower.includes("mixtral") || lower.includes("moe") || lower.includes("dbrx") || lower.includes("switch")) return "MoE";
+  // Everything else (LlamaForCausalLM, MistralForCausalLM, GPT2LMHeadModel, etc.) is Transformer-based
+  return "Transformer";
+}
+
 export function mapHFRowToModel(row: HFLeaderboardRow): LiveModel {
+  const isMoE = row.MoE ?? false;
   return {
     id: slugify(row.fullname),
     huggingFaceId: row.fullname,
     name: prettyName(row.fullname),
-    architecture: row.Architecture ?? "Transformer",
+    architecture: normalizeArchitecture(row.Architecture, isMoE),
     creator: creatorFromId(row.fullname),
     params: formatParams(row["#Params (B)"]),
-    isMoE: row.MoE ?? false,
-    type: row.Type ?? "",
+    isMoE,
+    type: normalizeType(row.Type, row.Merged),
     license: row["Hub License"] ?? "",
-    releaseDate: null, // enriched server-side from llm-dates.json
+    releaseDate: row["Upload To Hub Date"] ?? null,
     benchmarks: {
       average: round2(row["Average ⬆️"]),
       bbh: round2(row.BBH),

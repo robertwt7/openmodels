@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.1] - 2026-04-04
+
+### Fixed
+- **LLM card alignment:** Stats block (Params/Avg/MMLU-Pro/BBH) and View button now have fixed widths so they align consistently across all rows regardless of badge count or label presence.
+- **Type filter now works:** HF Type strings (e.g. "💬 chat models (RLHF, DPO, IFT, ...)") are normalized to clean categories (`pretrained`, `chat`, `fine-tuned`, `instruct`, `merge`). Filter options updated to match.
+- **Architecture filter now works:** HF Architecture strings (e.g. "LlamaForCausalLM") are normalized to `Transformer`, `MoE`, or `SSM` so the Arch filter produces meaningful results.
+- **Release dates populated from HF dataset:** Now reads `Upload To Hub Date` field directly from the `open-llm-leaderboard/contents` dataset, falling back to `llm-dates.json` only when missing.
+- **HF link positioning:** Moved HF external link to sit consistently next to the model name on the first row, with type/architecture badges on the second row.
+
 ## [1.2.0] - 2026-04-03
 
 ### Changed
